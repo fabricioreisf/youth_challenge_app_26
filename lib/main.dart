@@ -1,17 +1,10 @@
 ﻿import 'package:flutter/material.dart';
-
-final List<Map<String, String>> mockStudents = [
-  {'name': 'Ana Beatriz Souza', 'cpf': '123.456.789-00', 'certificate': 'hash-cert-001'},
-  {'name': 'Bruno Henrique Lima', 'cpf': '234.567.890-11', 'certificate': 'hash-cert-002'},
-  {'name': 'Carla Mendes Rocha', 'cpf': '345.678.901-22', 'certificate': 'hash-cert-003'},
-  {'name': 'Diego Almeida Costa', 'cpf': '456.789.012-33', 'certificate': 'hash-cert-004'},
-  {'name': 'Eduarda Nunes Pinto', 'cpf': '567.890.123-44', 'certificate': 'hash-cert-005'},
-  {'name': 'Felipe Tavares Cruz', 'cpf': '678.901.234-55', 'certificate': 'hash-cert-006'},
-  {'name': 'Giovana Pereira Dias', 'cpf': '789.012.345-66', 'certificate': 'hash-cert-007'},
-  {'name': 'Henrique Barros Silva', 'cpf': '890.123.456-77', 'certificate': 'hash-cert-008'},
-  {'name': 'Isabela Ferreira Gomes', 'cpf': '901.234.567-88', 'certificate': 'hash-cert-009'},
-  {'name': 'João Pedro Azevedo', 'cpf': '012.345.678-99', 'certificate': 'hash-cert-010'},
-];
+import 'repositories/document_repository.dart';
+import 'repositories/student_repository.dart';
+import 'services/attestation_service.dart';
+import 'models/document_request.dart';
+import 'models/educational_document.dart';
+import 'models/student.dart';
 
 void main() {
   runApp(const YouthChallengeApp());
@@ -42,13 +35,48 @@ class DemoNavigationPage extends StatefulWidget {
 }
 
 class _DemoNavigationPageState extends State<DemoNavigationPage> {
+  final StudentRepository _studentRepository = StudentRepository();
+  final DocumentRepository _documentRepository = DocumentRepository();
+  final AttestationService _attestationService = AttestationService();
+
   int _selectedIndex = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _studentRepository.addStudent(Student(
+      id: 'student-1',
+      name: 'Ana Beatriz Souza',
+      cpf: '123.456.789-00',
+      guardianName: 'Maria Souza',
+      guardianCpf: '111.222.333-44',
+      schoolName: 'Escola Municipal de Ensino Fundamental',
+    ));
+    _documentRepository.addDocument(EducationalDocument(
+      id: 'doc-1',
+      studentId: 'student-1',
+      type: 'Histórico',
+      title: 'Histórico escolar',
+      fileName: 'historico-ana.pdf',
+      hash: _attestationService.createHash('historico-ana.pdf'),
+      attestationId: _attestationService.createAttestationId('historico-ana.pdf'),
+      status: 'registrado',
+      createdAt: DateTime.now(),
+    ));
+  }
 
   @override
   Widget build(BuildContext context) {
     final pages = <Widget>[
-      OverviewPage(onNavigate: (index) => setState(() => _selectedIndex = index)),
-      const StudentFormPage(),
+      OverviewPage(
+        onNavigate: (index) => setState(() => _selectedIndex = index),
+        onStartDemo: () => setState(() => _selectedIndex = 1),
+      ),
+      SchoolRegistrationPage(
+        studentRepository: _studentRepository,
+        documentRepository: _documentRepository,
+        attestationService: _attestationService,
+      ),
       const DocumentFormPage(),
       const RequestPage(),
       const VerificationPage(),
@@ -70,7 +98,7 @@ class _DemoNavigationPageState extends State<DemoNavigationPage> {
         onDestinationSelected: (index) => setState(() => _selectedIndex = index),
         destinations: const [
           NavigationDestination(icon: Icon(Icons.home_outlined), selectedIcon: Icon(Icons.home), label: 'Visão geral'),
-          NavigationDestination(icon: Icon(Icons.person_outline), selectedIcon: Icon(Icons.person), label: 'Aluno'),
+          NavigationDestination(icon: Icon(Icons.school_outlined), selectedIcon: Icon(Icons.school), label: 'Escola'),
           NavigationDestination(icon: Icon(Icons.upload_file_outlined), selectedIcon: Icon(Icons.upload_file), label: 'Documentos'),
           NavigationDestination(icon: Icon(Icons.swap_horiz_outlined), selectedIcon: Icon(Icons.swap_horiz), label: 'Solicitações'),
           NavigationDestination(icon: Icon(Icons.verified_outlined), selectedIcon: Icon(Icons.verified), label: 'Verificação'),
@@ -82,8 +110,9 @@ class _DemoNavigationPageState extends State<DemoNavigationPage> {
 
 class OverviewPage extends StatelessWidget {
   final ValueChanged<int> onNavigate;
+  final VoidCallback onStartDemo;
 
-  const OverviewPage({required this.onNavigate, super.key});
+  const OverviewPage({required this.onNavigate, required this.onStartDemo, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -96,14 +125,21 @@ class OverviewPage extends StatelessWidget {
         ),
         const SizedBox(height: 8),
         Text(
-          'Acesse os módulos abaixo para consultar, registrar e solicitar documentos escolares.',
+          'Uma demo navegável para mostrar como uma escola registra alunos, carimba documentos e solicita transferências com consentimento.',
           style: Theme.of(context).textTheme.bodyLarge,
+        ),
+        const SizedBox(height: 20),
+        FilledButton.icon(
+          key: const ValueKey('start-demo-button'),
+          onPressed: onStartDemo,
+          icon: const Icon(Icons.play_arrow_outlined),
+          label: const Text('Iniciar demo'),
         ),
         const SizedBox(height: 20),
         _SectionCard(
           title: 'Cadastro do aluno',
-          subtitle: 'Registrar dados principais do aluno e vincular o responsável.',
-          icon: Icons.person_add_alt_1_outlined,
+          subtitle: 'Registrar a instituição e o fluxo inicial do aluno.',
+          icon: Icons.school_outlined,
           onTap: () => onNavigate(1),
         ),
         _SectionCard(
@@ -135,21 +171,14 @@ class _SectionCard extends StatelessWidget {
   final IconData icon;
   final VoidCallback onTap;
 
-  const _SectionCard({
-    required this.title,
-    required this.subtitle,
-    required this.icon,
-    required this.onTap,
-  });
+  const _SectionCard({required this.title, required this.subtitle, required this.icon, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
     return Card(
       margin: const EdgeInsets.only(bottom: 12),
       child: ListTile(
-        leading: CircleAvatar(
-          child: Icon(icon),
-        ),
+        leading: CircleAvatar(child: Icon(icon)),
         title: Text(title),
         subtitle: Text(subtitle),
         trailing: const Icon(Icons.arrow_forward_ios_rounded, size: 16),
@@ -159,25 +188,32 @@ class _SectionCard extends StatelessWidget {
   }
 }
 
-class StudentFormPage extends StatefulWidget {
-  const StudentFormPage({super.key});
+class SchoolRegistrationPage extends StatefulWidget {
+  const SchoolRegistrationPage({required this.studentRepository, required this.documentRepository, required this.attestationService, super.key});
+
+  final StudentRepository studentRepository;
+  final DocumentRepository documentRepository;
+  final AttestationService attestationService;
 
   @override
-  State<StudentFormPage> createState() => _StudentFormPageState();
+  State<SchoolRegistrationPage> createState() => _SchoolRegistrationPageState();
 }
 
-class _StudentFormPageState extends State<StudentFormPage> {
-  final _studentController = TextEditingController();
-  final _cpfController = TextEditingController();
-  final _responsibleController = TextEditingController();
-  String _status = 'Aguardando cadastro do aluno.';
-  String _searchResult = '';
+class _SchoolRegistrationPageState extends State<SchoolRegistrationPage> {
+  final _schoolController = TextEditingController(text: 'Escola Municipal de Ensino Fundamental');
+  final _studentController = TextEditingController(text: 'Ana Beatriz Souza');
+  final _cpfController = TextEditingController(text: '123.456.789-00');
+  final _guardianController = TextEditingController(text: 'Maria Souza');
+  final _guardianCpfController = TextEditingController(text: '111.222.333-44');
+  String _status = 'Pronto para registrar o aluno.';
 
   @override
   void dispose() {
+    _schoolController.dispose();
     _studentController.dispose();
     _cpfController.dispose();
-    _responsibleController.dispose();
+    _guardianController.dispose();
+    _guardianCpfController.dispose();
     super.dispose();
   }
 
@@ -187,35 +223,51 @@ class _StudentFormPageState extends State<StudentFormPage> {
       children: [
         Text('Cadastro do aluno', style: Theme.of(context).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold)),
         const SizedBox(height: 8),
+        Text('Cadastro da escola', style: Theme.of(context).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w600)),
+        const SizedBox(height: 4),
         Text('Registre os dados principais do aluno no sistema.', style: Theme.of(context).textTheme.bodyLarge),
+        const SizedBox(height: 12),
+        Text('Cadastre a instituição, o aluno e o responsável legal para dar início ao fluxo de documentos.', style: Theme.of(context).textTheme.bodyLarge),
         const SizedBox(height: 20),
+        TextField(controller: _schoolController, decoration: const InputDecoration(labelText: 'Nome da escola')),
+        const SizedBox(height: 12),
         TextField(controller: _studentController, decoration: const InputDecoration(labelText: 'Nome do aluno')),
         const SizedBox(height: 12),
         TextField(controller: _cpfController, decoration: const InputDecoration(labelText: 'CPF')),
         const SizedBox(height: 12),
-        TextField(controller: _responsibleController, decoration: const InputDecoration(labelText: 'Responsável legal')),
+        TextField(controller: _guardianController, decoration: const InputDecoration(labelText: 'Responsável legal')),
+        const SizedBox(height: 12),
+        TextField(controller: _guardianCpfController, decoration: const InputDecoration(labelText: 'CPF do responsável')),
         const SizedBox(height: 20),
         FilledButton.icon(
           onPressed: () {
-            final cpf = _cpfController.text.trim();
-            final match = mockStudents.firstWhere(
-              (student) => student['cpf'] == cpf,
-              orElse: () => {'name': '', 'cpf': '', 'certificate': ''},
+            final student = Student(
+              id: 'student-${DateTime.now().millisecondsSinceEpoch}',
+              name: _studentController.text.trim(),
+              cpf: _cpfController.text.trim(),
+              guardianName: _guardianController.text.trim(),
+              guardianCpf: _guardianCpfController.text.trim(),
+              schoolName: _schoolController.text.trim(),
             );
-            setState(() {
-              _status = match['name']!.isNotEmpty ? 'Aluno localizado e vinculado ao registro.' : 'Aluno cadastrado no sistema.';
-              _searchResult = match['name']!.isNotEmpty ? 'Último certificado: ${match['certificate']}' : '';
-            });
+            widget.studentRepository.addStudent(student);
+            widget.documentRepository.addDocument(EducationalDocument(
+              id: 'doc-${DateTime.now().millisecondsSinceEpoch}',
+              studentId: student.id,
+              type: 'Histórico',
+              title: 'Histórico escolar',
+              fileName: '${student.name.toLowerCase().replaceAll(RegExp(r'\\s+'), '-')}.pdf',
+              hash: widget.attestationService.createHash(student.cpf),
+              attestationId: widget.attestationService.createAttestationId(student.cpf),
+              status: 'registrado',
+              createdAt: DateTime.now(),
+            ));
+            setState(() => _status = 'Aluno e documento registrados com carimbo de validação.');
           },
-          icon: const Icon(Icons.person_add_alt_1_outlined),
-          label: const Text('Salvar aluno'),
+          icon: const Icon(Icons.school_outlined),
+          label: const Text('Registrar escola e aluno'),
         ),
         const SizedBox(height: 16),
         Text(_status, style: Theme.of(context).textTheme.bodyMedium),
-        if (_searchResult.isNotEmpty) ...[
-          const SizedBox(height: 8),
-          Text(_searchResult, style: Theme.of(context).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w600)),
-        ],
       ],
     );
   }
