@@ -1,5 +1,18 @@
 ﻿import 'package:flutter/material.dart';
 
+final List<Map<String, String>> mockStudents = [
+  {'name': 'Ana Beatriz Souza', 'cpf': '123.456.789-00', 'certificate': 'hash-cert-001'},
+  {'name': 'Bruno Henrique Lima', 'cpf': '234.567.890-11', 'certificate': 'hash-cert-002'},
+  {'name': 'Carla Mendes Rocha', 'cpf': '345.678.901-22', 'certificate': 'hash-cert-003'},
+  {'name': 'Diego Almeida Costa', 'cpf': '456.789.012-33', 'certificate': 'hash-cert-004'},
+  {'name': 'Eduarda Nunes Pinto', 'cpf': '567.890.123-44', 'certificate': 'hash-cert-005'},
+  {'name': 'Felipe Tavares Cruz', 'cpf': '678.901.234-55', 'certificate': 'hash-cert-006'},
+  {'name': 'Giovana Pereira Dias', 'cpf': '789.012.345-66', 'certificate': 'hash-cert-007'},
+  {'name': 'Henrique Barros Silva', 'cpf': '890.123.456-77', 'certificate': 'hash-cert-008'},
+  {'name': 'Isabela Ferreira Gomes', 'cpf': '901.234.567-88', 'certificate': 'hash-cert-009'},
+  {'name': 'João Pedro Azevedo', 'cpf': '012.345.678-99', 'certificate': 'hash-cert-010'},
+];
+
 void main() {
   runApp(const YouthChallengeApp());
 }
@@ -35,10 +48,8 @@ class _DemoNavigationPageState extends State<DemoNavigationPage> {
   Widget build(BuildContext context) {
     final pages = <Widget>[
       OverviewPage(onNavigate: (index) => setState(() => _selectedIndex = index)),
-      const SchoolFormPage(),
       const StudentFormPage(),
       const DocumentFormPage(),
-      const BlockchainPage(),
       const RequestPage(),
       const VerificationPage(),
     ];
@@ -59,10 +70,8 @@ class _DemoNavigationPageState extends State<DemoNavigationPage> {
         onDestinationSelected: (index) => setState(() => _selectedIndex = index),
         destinations: const [
           NavigationDestination(icon: Icon(Icons.home_outlined), selectedIcon: Icon(Icons.home), label: 'Visão geral'),
-          NavigationDestination(icon: Icon(Icons.school_outlined), selectedIcon: Icon(Icons.school), label: 'Escola'),
           NavigationDestination(icon: Icon(Icons.person_outline), selectedIcon: Icon(Icons.person), label: 'Aluno'),
-          NavigationDestination(icon: Icon(Icons.upload_file_outlined), selectedIcon: Icon(Icons.upload_file), label: 'Docs'),
-          NavigationDestination(icon: Icon(Icons.fact_check_outlined), selectedIcon: Icon(Icons.fact_check), label: 'Blockchain'),
+          NavigationDestination(icon: Icon(Icons.upload_file_outlined), selectedIcon: Icon(Icons.upload_file), label: 'Documentos'),
           NavigationDestination(icon: Icon(Icons.swap_horiz_outlined), selectedIcon: Icon(Icons.swap_horiz), label: 'Solicitações'),
           NavigationDestination(icon: Icon(Icons.verified_outlined), selectedIcon: Icon(Icons.verified), label: 'Verificação'),
         ],
@@ -81,51 +90,39 @@ class OverviewPage extends StatelessWidget {
     return ListView(
       children: [
         Text(
-          'Visão geral da demo',
+          'Visão geral',
           key: const ValueKey('welcome-title'),
           style: Theme.of(context).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold),
         ),
         const SizedBox(height: 8),
         Text(
-          'A navegação está aberta para qualquer ordem. Explore os módulos abaixo e monte a demo da forma que preferir.',
+          'Acesse os módulos abaixo para consultar, registrar e solicitar documentos escolares.',
           style: Theme.of(context).textTheme.bodyLarge,
         ),
         const SizedBox(height: 20),
         _SectionCard(
-          title: 'Cadastro da escola',
-          subtitle: 'Incluir escola, CNPJ e dados institucionais.',
-          icon: Icons.school_outlined,
+          title: 'Cadastro do aluno',
+          subtitle: 'Registrar dados principais do aluno e vincular o responsável.',
+          icon: Icons.person_add_alt_1_outlined,
           onTap: () => onNavigate(1),
         ),
         _SectionCard(
-          title: 'Cadastro do aluno',
-          subtitle: 'Vincular aluno, CPF e responsável legal.',
-          icon: Icons.person_add_alt_1_outlined,
+          title: 'Documentos',
+          subtitle: 'Consultar e registrar certificados e registros escolares.',
+          icon: Icons.upload_file_outlined,
           onTap: () => onNavigate(2),
         ),
         _SectionCard(
-          title: 'Upload de documentos',
-          subtitle: 'Registrar histórico, boletim e certificados.',
-          icon: Icons.upload_file_outlined,
+          title: 'Solicitações',
+          subtitle: 'Enviar pedidos de documentos entre unidades escolares.',
+          icon: Icons.swap_horiz_outlined,
           onTap: () => onNavigate(3),
         ),
         _SectionCard(
-          title: 'Carimbo na blockchain',
-          subtitle: 'Emitir a attestation e mostrar o registro.',
-          icon: Icons.fact_check_outlined,
-          onTap: () => onNavigate(4),
-        ),
-        _SectionCard(
-          title: 'Solicitações',
-          subtitle: 'Conceder ou solicitar documentos entre escolas.',
-          icon: Icons.swap_horiz_outlined,
-          onTap: () => onNavigate(5),
-        ),
-        _SectionCard(
-          title: 'Verificação pública',
-          subtitle: 'Validar a autenticidade do documento.',
+          title: 'Verificação',
+          subtitle: 'Validar a autenticidade de um registro a partir do CPF ou do certificado.',
           icon: Icons.verified_outlined,
-          onTap: () => onNavigate(6),
+          onTap: () => onNavigate(4),
         ),
       ],
     );
@@ -162,64 +159,6 @@ class _SectionCard extends StatelessWidget {
   }
 }
 
-class SchoolFormPage extends StatefulWidget {
-  const SchoolFormPage({super.key});
-
-  @override
-  State<SchoolFormPage> createState() => _SchoolFormPageState();
-}
-
-class _SchoolFormPageState extends State<SchoolFormPage> {
-  final _nameController = TextEditingController();
-  final _cnpjController = TextEditingController();
-  final _inepController = TextEditingController();
-  final _contactController = TextEditingController();
-  String _status = 'Pronto para cadastrar a escola.';
-
-  @override
-  void dispose() {
-    _nameController.dispose();
-    _cnpjController.dispose();
-    _inepController.dispose();
-    _contactController.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return ListView(
-      children: [
-        Text('Cadastro da escola', style: Theme.of(context).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold)),
-        const SizedBox(height: 8),
-        Text('Preencha os dados institucionais para abrir o fluxo da demo.', style: Theme.of(context).textTheme.bodyLarge),
-        const SizedBox(height: 20),
-        TextField(controller: _nameController, decoration: const InputDecoration(labelText: 'Nome da escola')),
-        const SizedBox(height: 12),
-        TextField(controller: _cnpjController, decoration: const InputDecoration(labelText: 'CNPJ')),
-        const SizedBox(height: 12),
-        TextField(controller: _inepController, decoration: const InputDecoration(labelText: 'Código INEP')),
-        const SizedBox(height: 12),
-        TextField(controller: _contactController, decoration: const InputDecoration(labelText: 'Contato responsável')),
-        const SizedBox(height: 20),
-        FilledButton.icon(
-          onPressed: () {
-            setState(() {
-              _status = 'Escola cadastrada com sucesso para a demo.';
-            });
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Cadastro da escola concluído.')),
-            );
-          },
-          icon: const Icon(Icons.save_alt_rounded),
-          label: const Text('Salvar cadastro'),
-        ),
-        const SizedBox(height: 16),
-        Text(_status, style: Theme.of(context).textTheme.bodyMedium),
-      ],
-    );
-  }
-}
-
 class StudentFormPage extends StatefulWidget {
   const StudentFormPage({super.key});
 
@@ -232,6 +171,7 @@ class _StudentFormPageState extends State<StudentFormPage> {
   final _cpfController = TextEditingController();
   final _responsibleController = TextEditingController();
   String _status = 'Aguardando cadastro do aluno.';
+  String _searchResult = '';
 
   @override
   void dispose() {
@@ -247,7 +187,7 @@ class _StudentFormPageState extends State<StudentFormPage> {
       children: [
         Text('Cadastro do aluno', style: Theme.of(context).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold)),
         const SizedBox(height: 8),
-        Text('O fluxo permite incluir aluno, CPF e responsável em qualquer ordem.', style: Theme.of(context).textTheme.bodyLarge),
+        Text('Registre os dados principais do aluno no sistema.', style: Theme.of(context).textTheme.bodyLarge),
         const SizedBox(height: 20),
         TextField(controller: _studentController, decoration: const InputDecoration(labelText: 'Nome do aluno')),
         const SizedBox(height: 12),
@@ -257,8 +197,14 @@ class _StudentFormPageState extends State<StudentFormPage> {
         const SizedBox(height: 20),
         FilledButton.icon(
           onPressed: () {
+            final cpf = _cpfController.text.trim();
+            final match = mockStudents.firstWhere(
+              (student) => student['cpf'] == cpf,
+              orElse: () => {'name': '', 'cpf': '', 'certificate': ''},
+            );
             setState(() {
-              _status = 'Aluno vinculado com sucesso ao fluxo.';
+              _status = match['name']!.isNotEmpty ? 'Aluno localizado e vinculado ao registro.' : 'Aluno cadastrado no sistema.';
+              _searchResult = match['name']!.isNotEmpty ? 'Último certificado: ${match['certificate']}' : '';
             });
           },
           icon: const Icon(Icons.person_add_alt_1_outlined),
@@ -266,6 +212,10 @@ class _StudentFormPageState extends State<StudentFormPage> {
         ),
         const SizedBox(height: 16),
         Text(_status, style: Theme.of(context).textTheme.bodyMedium),
+        if (_searchResult.isNotEmpty) ...[
+          const SizedBox(height: 8),
+          Text(_searchResult, style: Theme.of(context).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w600)),
+        ],
       ],
     );
   }
@@ -280,8 +230,8 @@ class DocumentFormPage extends StatefulWidget {
 
 class _DocumentFormPageState extends State<DocumentFormPage> {
   String _selectedType = 'Boletim';
-  final _nameController = TextEditingController(text: 'documento-demo.pdf');
-  String _hash = 'Aguardando geração do hash.';
+  final _nameController = TextEditingController(text: 'registro-escolar.pdf');
+  String _hash = 'Aguardando geração do certificado.';
 
   @override
   void dispose() {
@@ -293,9 +243,9 @@ class _DocumentFormPageState extends State<DocumentFormPage> {
   Widget build(BuildContext context) {
     return ListView(
       children: [
-        Text('Upload de documentos', style: Theme.of(context).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold)),
+        Text('Documentos', style: Theme.of(context).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold)),
         const SizedBox(height: 8),
-        Text('Selecione o tipo, carregue o arquivo e gere o hash para o carimbo.', style: Theme.of(context).textTheme.bodyLarge),
+        Text('Selecione o tipo, carregue o arquivo e registre o certificado associado ao aluno.', style: Theme.of(context).textTheme.bodyLarge),
         const SizedBox(height: 20),
         DropdownButtonFormField<String>(
           value: _selectedType,
@@ -317,7 +267,7 @@ class _DocumentFormPageState extends State<DocumentFormPage> {
             setState(() => _hash = generated);
           },
           icon: const Icon(Icons.generating_tokens_outlined),
-          label: const Text('Gerar hash simulado'),
+          label: const Text('Registrar certificado'),
         ),
         const SizedBox(height: 16),
         Card(
@@ -326,56 +276,12 @@ class _DocumentFormPageState extends State<DocumentFormPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('Hash gerado', style: Theme.of(context).textTheme.titleMedium),
+                Text('Certificado registrado', style: Theme.of(context).textTheme.titleMedium),
                 const SizedBox(height: 8),
                 SelectableText(_hash),
               ],
             ),
           ),
-        ),
-      ],
-    );
-  }
-}
-
-class BlockchainPage extends StatefulWidget {
-  const BlockchainPage({super.key});
-
-  @override
-  State<BlockchainPage> createState() => _BlockchainPageState();
-}
-
-class _BlockchainPageState extends State<BlockchainPage> {
-  bool _isStamped = false;
-
-  @override
-  Widget build(BuildContext context) {
-    return ListView(
-      children: [
-        Text('Carimbo na blockchain', style: Theme.of(context).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold)),
-        const SizedBox(height: 8),
-        Text('Esta tela simula a emissão da attestation para a demo.', style: Theme.of(context).textTheme.bodyLarge),
-        const SizedBox(height: 20),
-        Card(
-          child: Padding(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text('Status do registro', style: Theme.of(context).textTheme.titleMedium),
-                const SizedBox(height: 8),
-                Text(_isStamped ? 'Registro criado com sucesso.' : 'Aguardando criação do carimbo.'),
-                const SizedBox(height: 8),
-                Text(_isStamped ? 'tx-demo-2026-07-29' : 'Sem transação enviada ainda.'),
-              ],
-            ),
-          ),
-        ),
-        const SizedBox(height: 20),
-        FilledButton.icon(
-          onPressed: () => setState(() => _isStamped = true),
-          icon: const Icon(Icons.fact_check_outlined),
-          label: const Text('Criar carimbo'),
         ),
       ],
     );
@@ -405,9 +311,9 @@ class _RequestPageState extends State<RequestPage> {
   Widget build(BuildContext context) {
     return ListView(
       children: [
-        Text('Solicitação entre escolas', style: Theme.of(context).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold)),
+        Text('Solicitações', style: Theme.of(context).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold)),
         const SizedBox(height: 8),
-        Text('A outra escola pode pedir acesso ao documento e a liberação passa por consentimento.', style: Theme.of(context).textTheme.bodyLarge),
+        Text('Uma unidade escolar pode solicitar acesso ao documento e a liberação segue o fluxo interno de aprovação.', style: Theme.of(context).textTheme.bodyLarge),
         const SizedBox(height: 20),
         TextField(controller: _cpfController, decoration: const InputDecoration(labelText: 'CPF do aluno')),
         const SizedBox(height: 12),
@@ -448,16 +354,16 @@ class _VerificationPageState extends State<VerificationPage> {
   Widget build(BuildContext context) {
     return ListView(
       children: [
-        Text('Verificação pública', style: Theme.of(context).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold)),
+        Text('Verificação', style: Theme.of(context).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold)),
         const SizedBox(height: 8),
-        Text('Use o hash ou a referência de transação para validar a autenticidade do documento.', style: Theme.of(context).textTheme.bodyLarge),
+        Text('Use o CPF ou o certificado para validar o registro do aluno no sistema.', style: Theme.of(context).textTheme.bodyLarge),
         const SizedBox(height: 20),
-        TextField(controller: _hashController, decoration: const InputDecoration(labelText: 'Hash ou transação')),
+        TextField(controller: _hashController, decoration: const InputDecoration(labelText: 'CPF ou certificado')),
         const SizedBox(height: 20),
         FilledButton.icon(
           onPressed: () => setState(() => _isVerified = _hashController.text.isNotEmpty),
           icon: const Icon(Icons.verified_outlined),
-          label: const Text('Validar documento'),
+          label: const Text('Validar registro'),
         ),
         const SizedBox(height: 16),
         Card(
@@ -465,7 +371,7 @@ class _VerificationPageState extends State<VerificationPage> {
           child: Padding(
             padding: const EdgeInsets.all(16),
             child: Text(
-              _isVerified ? 'Documento autenticado com sucesso.' : 'Ainda não há validação para este registro.',
+              _isVerified ? 'Registro localizado com sucesso.' : 'Ainda não há validação para este registro.',
               style: Theme.of(context).textTheme.bodyMedium,
             ),
           ),

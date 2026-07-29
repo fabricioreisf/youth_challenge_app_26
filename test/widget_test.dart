@@ -1,15 +1,16 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:youth_challenge_app_26/main.dart';
 
 void main() {
-  testWidgets('allows navigating from overview to school form in any order', (tester) async {
+  testWidgets('allows navigating from overview to student registration', (tester) async {
     await tester.pumpWidget(const YouthChallengeApp());
 
-    expect(find.text('Visão geral da demo'), findsOneWidget);
-    await tester.tap(find.text('Cadastro da escola'));
+    expect(find.byKey(const ValueKey('welcome-title')), findsOneWidget);
+    await tester.tap(find.text('Cadastro do aluno'));
     await tester.pumpAndSettle();
 
-    expect(find.text('Cadastro da escola'), findsOneWidget);
-    expect(find.text('Preencha os dados institucionais para abrir o fluxo da demo.'), findsOneWidget);
+    expect(find.text('Cadastro do aluno'), findsOneWidget);
+    expect(find.text('Registre os dados principais do aluno no sistema.'), findsOneWidget);
   });
 }

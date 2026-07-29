@@ -27,7 +27,7 @@ Vale registrar um ponto de contexto que muda a forma de priorizar: o Youth Chall
 - **Escola de destino** — instituição que solicita os documentos ao sistema unificado (ex.: em caso de transferência ou nova matrícula).
 - **Secretaria de Educação (municipal/estadual/MEC)** — potencial integrador/gestor de política pública no futuro.
 - **Verificador externo** — qualquer terceiro (outra escola, universidade, empregador) que precisa confirmar a autenticidade de um documento sem ter acesso direto ao sistema.
-- **Administrador do sistema** — gestão de escolas cadastradas, monitoramento.
+- **Administrador do sistema** — monitoramento.
 
 ---
 
@@ -141,7 +141,7 @@ Sobre o "por que blockchain?" do pitch, a mentoria já trouxe dois argumentos (c
 3. **Quem paga o custo da transação (gas)?** Recomendo modelo subsidiado pela plataforma/escola (comum em soluções B2G com blockchain), para que família e aluno nunca precisem ter criptoativos.
 4. **Corte exato do MVP de demo**: quais RFs entram só como mockup navegável (🟢) e qual(is) precisam mesmo funcionar com chamada real (🔵)? A tabela da seção 3 já é um ponto de partida para essa conversa.
 5. **Tape entra na demo ou fica só citado como próximo passo no pitch?** Dado o prazo curto, uma opção segura é deixá-lo como visão de produto (⚪) e focar o tempo de dev no SAS.
-6. **Segurança do "CPF como chave de busca"**: como impedir que qualquer escola cadastrada consulte o histórico de qualquer criança só sabendo o CPF dela? Precisa de uma camada extra de autorização — por exemplo, só liberar dados após uma solicitação formal aceita pela escola de origem ou pelo responsável (RF14 já aponta essa direção, mas vale deixar isso explícito no pitch como um cuidado de proteção à criança, o que é literalmente o tema do desafio).
+6. **Segurança do "CPF como chave de busca"**: como impedir que qualquer escola  consulte o histórico de qualquer criança só sabendo o CPF dela? Precisa de uma camada extra de autorização — por exemplo, só liberar dados após uma solicitação formal aceita pela escola de origem ou pelo responsável (RF14 já aponta essa direção, mas vale deixar isso explícito no pitch como um cuidado de proteção à criança, o que é literalmente o tema do desafio).
 
 ---
 
