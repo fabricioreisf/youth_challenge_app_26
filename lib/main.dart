@@ -217,6 +217,59 @@ class _SchoolRegistrationPageState extends State<SchoolRegistrationPage> {
     super.dispose();
   }
 
+bool _validateFields() {
+  if (_schoolController.text.trim().isEmpty) {
+    _showError('Informe o nome da escola.');
+    return false;
+  }
+
+  if (_studentController.text.trim().isEmpty) {
+    _showError('Informe o nome do aluno.');
+    return false;
+  }
+
+  if (_cpfController.text.trim().isEmpty) {
+    _showError('Informe o CPF do aluno.');
+    return false;
+  }
+
+final cpf = _cpfController.text.replaceAll(RegExp(r'\D'), '');
+
+if (cpf.length != 11) {
+  _showError('CPF do aluno deve conter 11 dígitos.');
+  return false;
+}
+
+  if (_guardianController.text.trim().isEmpty) {
+    _showError('Informe o responsável legal.');
+    return false;
+  }
+
+  if (_guardianCpfController.text.trim().isEmpty) {
+    _showError('Informe o CPF do responsável.');
+    return false;
+  }
+
+final guardianCpf =
+    _guardianCpfController.text.replaceAll(RegExp(r'\D'), '');
+
+if (guardianCpf.length != 11) {
+  _showError('CPF do responsável deve conter 11 dígitos.');
+  return false;
+}
+
+  return true;
+}
+
+void _showError(String message) {
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+      content: Text(message),
+      backgroundColor: Colors.red,
+    ),
+  );
+}
+
   @override
   Widget build(BuildContext context) {
     return ListView(
@@ -241,6 +294,7 @@ class _SchoolRegistrationPageState extends State<SchoolRegistrationPage> {
         const SizedBox(height: 20),
         FilledButton.icon(
           onPressed: () {
+            if (!_validateFields()) return;
             final student = Student(
               id: 'student-${DateTime.now().millisecondsSinceEpoch}',
               name: _studentController.text.trim(),
