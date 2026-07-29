@@ -2,7 +2,7 @@
 import 'repositories/document_repository.dart';
 import 'repositories/student_repository.dart';
 import 'services/attestation_service.dart';
-import 'models/document_request.dart';
+// import 'models/document_request.dart';
 import 'models/educational_document.dart';
 import 'models/student.dart';
 
@@ -300,7 +300,7 @@ class _DocumentFormPageState extends State<DocumentFormPage> {
         Text('Selecione o tipo, carregue o arquivo e registre o certificado associado ao aluno.', style: Theme.of(context).textTheme.bodyLarge),
         const SizedBox(height: 20),
         DropdownButtonFormField<String>(
-          value: _selectedType,
+          initialValue: _selectedType,
           decoration: const InputDecoration(labelText: 'Tipo de documento'),
           items: const [
             DropdownMenuItem(value: 'Boletim', child: Text('Boletim')),
