@@ -1,4 +1,6 @@
-﻿import 'package:flutter/material.dart';
+﻿// ignore_for_file: prefer_final_fields
+
+import 'package:flutter/material.dart';
 import 'repositories/document_repository.dart';
 import 'repositories/student_repository.dart';
 import 'services/attestation_service.dart';
@@ -77,6 +79,7 @@ class _DemoNavigationPageState extends State<DemoNavigationPage> {
         documentRepository: _documentRepository,
         attestationService: _attestationService,
       ),
+      const UndocumentedChildPage(),
       const DocumentFormPage(),
       const RequestPage(),
       const VerificationPage(),
@@ -99,6 +102,7 @@ class _DemoNavigationPageState extends State<DemoNavigationPage> {
         destinations: const [
           NavigationDestination(icon: Icon(Icons.home_outlined), selectedIcon: Icon(Icons.home), label: 'Visão geral'),
           NavigationDestination(icon: Icon(Icons.school_outlined), selectedIcon: Icon(Icons.school), label: 'Escola'),
+          NavigationDestination( icon: Icon(Icons.person_search_outlined), selectedIcon: Icon(Icons.person_search), label: 'Sem documentos'),
           NavigationDestination(icon: Icon(Icons.upload_file_outlined), selectedIcon: Icon(Icons.upload_file), label: 'Documentos'),
           NavigationDestination(icon: Icon(Icons.swap_horiz_outlined), selectedIcon: Icon(Icons.swap_horiz), label: 'Solicitações'),
           NavigationDestination(icon: Icon(Icons.verified_outlined), selectedIcon: Icon(Icons.verified), label: 'Verificação'),
@@ -143,22 +147,28 @@ class OverviewPage extends StatelessWidget {
           onTap: () => onNavigate(1),
         ),
         _SectionCard(
+        title: 'Cadrasto do aluno sem documentos',
+        subtitle: 'Registrar aluno que não há documentos registrados.',
+        icon: Icons.person_search_outlined,
+        onTap: () => onNavigate(2)
+        ),
+        _SectionCard(
           title: 'Documentos',
           subtitle: 'Consultar e registrar certificados e registros escolares.',
           icon: Icons.upload_file_outlined,
-          onTap: () => onNavigate(2),
+          onTap: () => onNavigate(3),
         ),
         _SectionCard(
           title: 'Solicitações',
           subtitle: 'Enviar pedidos de documentos entre unidades escolares.',
           icon: Icons.swap_horiz_outlined,
-          onTap: () => onNavigate(3),
+          onTap: () => onNavigate(4),
         ),
         _SectionCard(
           title: 'Verificação',
           subtitle: 'Validar a autenticidade de um registro a partir do CPF ou do certificado.',
           icon: Icons.verified_outlined,
-          onTap: () => onNavigate(4),
+          onTap: () => onNavigate(5),
         ),
       ],
     );
@@ -486,3 +496,189 @@ class _VerificationPageState extends State<VerificationPage> {
     );
   }
 }
+class UndocumentedChildPage extends StatefulWidget {
+  const UndocumentedChildPage({super.key});
+
+  @override
+  State<UndocumentedChildPage> createState() =>
+      _UndocumentedChildPageState();
+}
+
+class _UndocumentedChildPageState
+    extends State<UndocumentedChildPage> {
+
+  final _nameController = TextEditingController();
+  final _birthController = TextEditingController();
+  final _cityController = TextEditingController();
+  final _guardianController = TextEditingController();
+
+bool _registered = false;
+// ignore: unused_field
+bool _identityCreated = false;
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    _birthController.dispose();
+    _cityController.dispose();
+    _guardianController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+  return ListView(
+    children: [
+      Text(
+        'Cadastro do aluno sem documentação',
+        style: Theme.of(context)
+            .textTheme
+            .headlineSmall
+            ?.copyWith(fontWeight: FontWeight.bold),
+      ),
+
+      const SizedBox(height: 8),
+
+      Text(
+        'Permite iniciar o registro escolar mesmo quando a criança ainda não possui toda a documentação oficial.',
+        style: Theme.of(context).textTheme.bodyLarge,
+      ),
+
+      const SizedBox(height: 24),
+
+      TextField(
+        controller: _nameController,
+        decoration: const InputDecoration(
+          labelText: 'Nome da criança',
+        ),
+      ),
+
+      const SizedBox(height: 12),
+
+      TextField(
+        controller: _birthController,
+        decoration: const InputDecoration(
+          labelText: 'Data aproximada de nascimento',
+        ),
+      ),
+
+      const SizedBox(height: 12),
+
+      TextField(
+        controller: _cityController,
+        decoration: const InputDecoration(
+          labelText: 'Município',
+        ),
+      ),
+
+      const SizedBox(height: 12),
+
+      TextField(
+        controller: _guardianController,
+        decoration: const InputDecoration(
+          labelText: 'Responsável',
+        ),
+      ),
+
+      const SizedBox(height: 24),
+
+      FilledButton.icon(
+        icon: const Icon(Icons.person_add_alt_1),
+        label: const Text("Registrar criança"),
+        onPressed: () {
+          setState(() {
+            _registered = true;
+          });
+        },
+      ),
+
+      const SizedBox(height: 20),
+
+      if (_registered) ...[
+        Card(
+          child: Padding(
+            padding: EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: const [
+
+                Text(
+                  "Solicitação criada",
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+
+                SizedBox(height: 10),
+
+                Text("Status: Em validação"),
+
+                SizedBox(height: 10),
+
+                Text("✔ Escola"),
+
+                Text("✔ UBS"),
+
+                Text("✔ Conselho Tutelar"),
+
+                Text("⏳ Cartório"),
+              ],
+            ),
+          ),
+        ),
+        const SizedBox(height: 20),
+        FilledButton.icon(
+          icon: const Icon(Icons.account_balance_wallet),
+          label: const Text("Emitir Identidade Digital Provisória"),
+          onPressed: () {
+            setState(() {
+              _identityCreated = true;
+            });
+          },
+        ),
+        if (_identityCreated)
+  Card(
+    color: Colors.green.shade50,
+    child: Padding(
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: const [
+          Text(
+            "Identidade Digital emitida",
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+
+          SizedBox(height: 12),
+
+          Text("Status: Ativa"),
+
+          SizedBox(height: 8),
+
+          Text("Blockchain: Solana"),
+
+          SizedBox(height: 8),
+
+          Text("Wallet ID: 7Y4M...X2KP"),
+
+          SizedBox(height: 8),
+
+          Text("Attestation registrada"),
+
+          SizedBox(height: 8),
+
+          Text("Hash: 0xA7F83B91E2C45F"),
+        ],
+      ),
+    ),
+  ),
+      ]
+    ],
+  );
+}
+}
+
