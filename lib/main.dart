@@ -19,10 +19,27 @@ class YouthChallengeApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Documentação Escolar Unificada',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.indigo),
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.indigo), brightness: Brightness.light,
         useMaterial3: true,
+
+        inputDecorationTheme: const InputDecorationTheme(
+        border: OutlineInputBorder(),
+        filled: true,
+        fillColor: Color(0xFFF7F8FA),
+  ),
+        cardTheme: const CardThemeData(
+        elevation: 2,
+        margin: EdgeInsets.symmetric(vertical: 8),
+        ),
+        filledButtonTheme: FilledButtonThemeData(
+          style: FilledButton.styleFrom(
+            minimumSize: const Size.fromHeight(52),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
+          ),
+        ),
       ),
       home: const DemoNavigationPage(),
     );
@@ -86,10 +103,6 @@ class _DemoNavigationPageState extends State<DemoNavigationPage> {
     ];
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Documentação Escolar Unificada'),
-        centerTitle: true,
-      ),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(20),
@@ -101,8 +114,8 @@ class _DemoNavigationPageState extends State<DemoNavigationPage> {
         onDestinationSelected: (index) => setState(() => _selectedIndex = index),
         destinations: const [
           NavigationDestination(icon: Icon(Icons.home_outlined), selectedIcon: Icon(Icons.home), label: 'Visão geral'),
-          NavigationDestination(icon: Icon(Icons.school_outlined), selectedIcon: Icon(Icons.school), label: 'Escola'),
-          NavigationDestination( icon: Icon(Icons.person_search_outlined), selectedIcon: Icon(Icons.person_search), label: 'Sem documentos'),
+          NavigationDestination(icon: Icon(Icons.school_outlined), selectedIcon: Icon(Icons.school), label: 'Cadastro'),
+          NavigationDestination( icon: Icon(Icons.person_search_outlined), selectedIcon: Icon(Icons.person_search), label: 'Cadrasto sem documentos'),
           NavigationDestination(icon: Icon(Icons.upload_file_outlined), selectedIcon: Icon(Icons.upload_file), label: 'Documentos'),
           NavigationDestination(icon: Icon(Icons.swap_horiz_outlined), selectedIcon: Icon(Icons.swap_horiz), label: 'Solicitações'),
           NavigationDestination(icon: Icon(Icons.verified_outlined), selectedIcon: Icon(Icons.verified), label: 'Verificação'),
@@ -122,6 +135,7 @@ class OverviewPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListView(
       children: [
+         const PageHeader( title: 'Documentação Escolar Unificada', subtitle: 'Documentação escolar segura utilizando blockchain.', icon: Icons.school,),
         Text(
           'Visão geral',
           key: const ValueKey('welcome-title'),
@@ -194,6 +208,53 @@ class _SectionCard extends StatelessWidget {
         trailing: const Icon(Icons.arrow_forward_ios_rounded, size: 16),
         onTap: onTap,
       ),
+    );
+  }
+}
+
+class PageHeader extends StatelessWidget {
+  final String title;
+  final String subtitle;
+  final IconData icon;
+
+  const PageHeader({
+    super.key,
+    required this.title,
+    required this.subtitle,
+    required this.icon,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+
+        CircleAvatar(
+          radius: 32,
+          child: Icon(icon,size:32),
+        ),
+
+        const SizedBox(height:16),
+
+        Text(
+          title,
+          style: Theme.of(context)
+              .textTheme
+              .headlineSmall
+              ?.copyWith(fontWeight: FontWeight.bold),
+        ),
+
+        const SizedBox(height:8),
+
+        Text(
+          subtitle,
+          textAlign: TextAlign.center,
+        ),
+
+        const SizedBox(height:20),
+
+        const Divider(),
+      ],
     );
   }
 }
@@ -284,12 +345,9 @@ void _showError(String message) {
   Widget build(BuildContext context) {
     return ListView(
       children: [
+         const PageHeader(title: 'Documentação Escolar Unificada', subtitle: 'Documentação escolar segura utilizando blockchain.', icon: Icons.school, ),
         Text('Cadastro do aluno', style: Theme.of(context).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold)),
         const SizedBox(height: 8),
-        Text('Cadastro da escola', style: Theme.of(context).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w600)),
-        const SizedBox(height: 4),
-        Text('Registre os dados principais do aluno no sistema.', style: Theme.of(context).textTheme.bodyLarge),
-        const SizedBox(height: 12),
         Text('Cadastre a instituição, o aluno e o responsável legal para dar início ao fluxo de documentos.', style: Theme.of(context).textTheme.bodyLarge),
         const SizedBox(height: 20),
         TextField(controller: _schoolController, decoration: const InputDecoration(labelText: 'Nome da escola')),
@@ -359,6 +417,7 @@ class _DocumentFormPageState extends State<DocumentFormPage> {
   Widget build(BuildContext context) {
     return ListView(
       children: [
+        const PageHeader( title: 'Documentação Escolar Unificada', subtitle: 'Documentação escolar segura utilizando blockchain.', icon: Icons.school,),
         Text('Documentos', style: Theme.of(context).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold)),
         const SizedBox(height: 8),
         Text('Selecione o tipo, carregue o arquivo e registre o certificado associado ao aluno.', style: Theme.of(context).textTheme.bodyLarge),
@@ -427,6 +486,7 @@ class _RequestPageState extends State<RequestPage> {
   Widget build(BuildContext context) {
     return ListView(
       children: [
+        const PageHeader( title: 'Documentação Escolar Unificada', subtitle: 'Documentação escolar segura utilizando blockchain.', icon: Icons.school,),
         Text('Solicitações', style: Theme.of(context).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold)),
         const SizedBox(height: 8),
         Text('Uma unidade escolar pode solicitar acesso ao documento e a liberação segue o fluxo interno de aprovação.', style: Theme.of(context).textTheme.bodyLarge),
@@ -470,6 +530,7 @@ class _VerificationPageState extends State<VerificationPage> {
   Widget build(BuildContext context) {
     return ListView(
       children: [
+        const PageHeader( title: 'Documentação Escolar Unificada', subtitle: 'Documentação escolar segura utilizando blockchain.', icon: Icons.school,),
         Text('Verificação', style: Theme.of(context).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold)),
         const SizedBox(height: 8),
         Text('Use o CPF ou o certificado para validar o registro do aluno no sistema.', style: Theme.of(context).textTheme.bodyLarge),
@@ -529,6 +590,7 @@ bool _identityCreated = false;
   Widget build(BuildContext context) {
   return ListView(
     children: [
+      const PageHeader( title: 'Documentação Escolar Unificada', subtitle: 'Documentação escolar segura utilizando blockchain.', icon: Icons.school,),
       Text(
         'Cadastro do aluno sem documentação',
         style: Theme.of(context)
