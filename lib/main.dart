@@ -20,23 +20,43 @@ class YouthChallengeApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.indigo), brightness: Brightness.light,
         useMaterial3: true,
-
-        inputDecorationTheme: const InputDecorationTheme(
-        border: OutlineInputBorder(),
-        filled: true,
-        fillColor: Color(0xFFF7F8FA),
-  ),
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: Colors.indigo,
+        ),
+        scaffoldBackgroundColor: const Color(0xFFF6F8FC),
         cardTheme: const CardThemeData(
-        elevation: 2,
-        margin: EdgeInsets.symmetric(vertical: 8),
+          elevation: 2,
+          margin: EdgeInsets.symmetric(vertical: 8),
+        ),
+        inputDecorationTheme: InputDecorationTheme(
+          filled: true,
+          fillColor: Colors.white,
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(14),
+            borderSide: BorderSide.none,
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(14),
+            borderSide: BorderSide.none,
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(14),
+            borderSide: const BorderSide(
+              color: Colors.indigo,
+              width: 2,
+            ),
+          ),
         ),
         filledButtonTheme: FilledButtonThemeData(
           style: FilledButton.styleFrom(
-            minimumSize: const Size.fromHeight(52),
+            minimumSize: const Size(double.infinity, 56),
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(16),
+            ),
+            textStyle: const TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w600,
             ),
           ),
         ),
@@ -91,6 +111,7 @@ class _DemoNavigationPageState extends State<DemoNavigationPage> {
         onNavigate: (index) => setState(() => _selectedIndex = index),
         onStartDemo: () => setState(() => _selectedIndex = 1),
       ),
+      
       SchoolRegistrationPage(
         studentRepository: _studentRepository,
         documentRepository: _documentRepository,
@@ -103,12 +124,17 @@ class _DemoNavigationPageState extends State<DemoNavigationPage> {
     ];
 
     return Scaffold(
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(20),
-          child: pages[_selectedIndex],
-        ),
+     body: SafeArea(
+  child: Center(
+    child: ConstrainedBox(
+      constraints: const BoxConstraints(maxWidth: 800),
+      child: Padding(
+        padding: const EdgeInsets.all(20),
+        child: pages[_selectedIndex],
       ),
+    ),
+  ),
+),
       bottomNavigationBar: NavigationBar(
         selectedIndex: _selectedIndex,
         onDestinationSelected: (index) => setState(() => _selectedIndex = index),
@@ -136,6 +162,7 @@ class OverviewPage extends StatelessWidget {
     return ListView(
       children: [
          const PageHeader( title: 'Documentação Escolar Unificada', subtitle: 'Documentação escolar segura utilizando blockchain.', icon: Icons.school,),
+        
         Text(
           'Visão geral',
           key: const ValueKey('welcome-title'),
@@ -153,36 +180,183 @@ class OverviewPage extends StatelessWidget {
           icon: const Icon(Icons.play_arrow_outlined),
           label: const Text('Iniciar demo'),
         ),
-        const SizedBox(height: 20),
-        _SectionCard(
-          title: 'Cadastro do aluno',
-          subtitle: 'Registrar a instituição e o fluxo inicial do aluno.',
-          icon: Icons.school_outlined,
-          onTap: () => onNavigate(1),
+
+Container(
+
+  padding: const EdgeInsets.all(16),
+
+  decoration: BoxDecoration(
+
+    color: Colors.indigo.shade50,
+
+    borderRadius:
+        BorderRadius.circular(16),
+
+  ),
+
+  child: const Row(
+
+    children:[
+
+      Icon(Icons.info),
+
+      SizedBox(width:10),
+
+      Expanded(
+
+        child: Text(
+
+          "Todos os registros possuem autenticação baseada em blockchain.",
+
         ),
-        _SectionCard(
-        title: 'Cadrasto do aluno sem documentos',
-        subtitle: 'Registrar aluno que não há documentos registrados.',
-        icon: Icons.person_search_outlined,
-        onTap: () => onNavigate(2)
+      ),
+    ],
+  ),
+),
+
+Row(
+  children: [
+    Expanded(
+      child: Card(
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            children: const [
+              Icon(Icons.people, size: 30),
+              SizedBox(height: 8),
+              Text(
+                '128',
+                style: TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              Text('Alunos'),
+            ],
+          ),
         ),
-        _SectionCard(
-          title: 'Documentos',
-          subtitle: 'Consultar e registrar certificados e registros escolares.',
-          icon: Icons.upload_file_outlined,
-          onTap: () => onNavigate(3),
+      ),
+    ),
+
+    const SizedBox(width: 12),
+
+    Expanded(
+      child: Card(
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            children: const [
+              Icon(Icons.description, size: 30),
+              SizedBox(height: 8),
+              Text(
+                '312',
+                style: TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              Text('Documentos'),
+            ],
+          ),
         ),
-        _SectionCard(
-          title: 'Solicitações',
-          subtitle: 'Enviar pedidos de documentos entre unidades escolares.',
-          icon: Icons.swap_horiz_outlined,
-          onTap: () => onNavigate(4),
+      ),
+    ),
+  ],
+),
+
+const SizedBox(height: 12),
+
+Row(
+  children: [
+    Expanded(
+      child: Card(
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            children: const [
+              Icon(Icons.badge, size: 30),
+              SizedBox(height: 8),
+              Text(
+                '15',
+                style: TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              Text('Identidades'),
+            ],
+          ),
         ),
-        _SectionCard(
-          title: 'Verificação',
-          subtitle: 'Validar a autenticidade de um registro a partir do CPF ou do certificado.',
-          icon: Icons.verified_outlined,
-          onTap: () => onNavigate(5),
+      ),
+    ),
+
+    const SizedBox(width: 12),
+
+    Expanded(
+      child: Card(
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            children: const [
+              Icon(Icons.verified, size: 30),
+              SizedBox(height: 8),
+              Text(
+                '287',
+                style: TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              Text('Verificações'),
+            ],
+          ),
+        ),
+      ),
+    ),
+  ],
+),
+
+const SizedBox(height: 20),
+
+        Card(
+          child: Padding(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              children: [
+                const SizedBox(height: 20),
+                _SectionCard(
+                  title: 'Cadastro do aluno',
+                  subtitle: 'Cadastre um novo estudante e registre seu histórico na blockchain.',
+                  icon: Icons.school_outlined,
+                  onTap: () => onNavigate(1),
+                ),
+                _SectionCard(
+                  title: 'Cadrasto do aluno sem documentos',
+                  subtitle: 'Registrar aluno que não há documentos registrados.',
+                  icon: Icons.person_search_outlined,
+                  onTap: () => onNavigate(2),
+                ),
+                _SectionCard(
+                  title: 'Documentos',
+                  subtitle: 'Consultar e registrar documentos escolares.',
+                  icon: Icons.upload_file_outlined,
+                  onTap: () => onNavigate(3),
+                ),
+                _SectionCard(
+                  title: 'Solicitações',
+                  subtitle: 'Solicitar pedidos de documentos entre unidades escolares.',
+                  icon: Icons.swap_horiz_outlined,
+                  onTap: () => onNavigate(4),
+                ),
+                _SectionCard(
+                  title: 'Verificação',
+                  subtitle: 'Verificar a autenticidade de um registro a partir do CPF ou do certificado.',
+                  icon: Icons.verified_outlined,
+                  onTap: () => onNavigate(5),
+                ),
+              ],
+            ),
+          ),
         ),
       ],
     );
@@ -201,13 +375,38 @@ class _SectionCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       margin: const EdgeInsets.only(bottom: 12),
-      child: ListTile(
-        leading: CircleAvatar(child: Icon(icon)),
-        title: Text(title),
-        subtitle: Text(subtitle),
-        trailing: const Icon(Icons.arrow_forward_ios_rounded, size: 16),
-        onTap: onTap,
+      child: Padding(
+  padding: const EdgeInsets.all(12),
+  child: Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+
+      CircleAvatar(
+        radius: 24,
+        child: Icon(icon),
       ),
+
+      const SizedBox(height:16),
+
+      Text(
+        title,
+        style: Theme.of(context).textTheme.titleLarge,
+      ),
+
+      const SizedBox(height:8),
+
+      Text(subtitle),
+
+      const SizedBox(height:16),
+
+      FilledButton(
+        onPressed: onTap,
+        child: const Text("Acessar"),
+      ),
+
+    ],
+  ),
+)
     );
   }
 }
@@ -226,35 +425,80 @@ class PageHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
+    return Container(
+      width: double.infinity,
+      margin: const EdgeInsets.only(bottom: 24),
+      padding: const EdgeInsets.all(20),
 
-        CircleAvatar(
-          radius: 32,
-          child: Icon(icon,size:32),
+      decoration: BoxDecoration(
+        gradient: const LinearGradient(
+          colors: [
+            Color(0xFF3949AB),
+            Color(0xFF5C6BC0),
+          ],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
         ),
+        borderRadius: BorderRadius.circular(20),
+        boxShadow: [
+          BoxShadow(
+            // ignore: deprecated_member_use
+            color: Colors.indigo.withOpacity(0.25),
+            blurRadius: 18,
+            offset: const Offset(0, 8),
+          ),
+        ],
+      ),
 
-        const SizedBox(height:16),
+      child: Row(
+        children: [
 
-        Text(
-          title,
-          style: Theme.of(context)
-              .textTheme
-              .headlineSmall
-              ?.copyWith(fontWeight: FontWeight.bold),
-        ),
+          Container(
+            width: 64,
+            height: 64,
+            decoration: BoxDecoration(
+              // ignore: deprecated_member_use
+              color: Colors.white.withOpacity(0.15),
+              shape: BoxShape.circle,
+            ),
+            child: Icon(
+              icon,
+              color: Colors.white,
+              size: 34,
+            ),
+          ),
 
-        const SizedBox(height:8),
+          const SizedBox(width: 18),
 
-        Text(
-          subtitle,
-          textAlign: TextAlign.center,
-        ),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
 
-        const SizedBox(height:20),
+                Text(
+                  title,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
 
-        const Divider(),
-      ],
+                const SizedBox(height: 6),
+
+                Text(
+                  subtitle,
+                  style: const TextStyle(
+                    color: Colors.white70,
+                    fontSize: 15,
+                    height: 1.3,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -345,51 +589,177 @@ void _showError(String message) {
   Widget build(BuildContext context) {
     return ListView(
       children: [
-         const PageHeader(title: 'Documentação Escolar Unificada', subtitle: 'Documentação escolar segura utilizando blockchain.', icon: Icons.school, ),
-        Text('Cadastro do aluno', style: Theme.of(context).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold)),
-        const SizedBox(height: 8),
-        Text('Cadastre a instituição, o aluno e o responsável legal para dar início ao fluxo de documentos.', style: Theme.of(context).textTheme.bodyLarge),
-        const SizedBox(height: 20),
-        TextField(controller: _schoolController, decoration: const InputDecoration(labelText: 'Nome da escola')),
-        const SizedBox(height: 12),
-        TextField(controller: _studentController, decoration: const InputDecoration(labelText: 'Nome do aluno')),
-        const SizedBox(height: 12),
-        TextField(controller: _cpfController, decoration: const InputDecoration(labelText: 'CPF')),
-        const SizedBox(height: 12),
-        TextField(controller: _guardianController, decoration: const InputDecoration(labelText: 'Responsável legal')),
-        const SizedBox(height: 12),
-        TextField(controller: _guardianCpfController, decoration: const InputDecoration(labelText: 'CPF do responsável')),
-        const SizedBox(height: 20),
-        FilledButton.icon(
-          onPressed: () {
-            if (!_validateFields()) return;
-            final student = Student(
-              id: 'student-${DateTime.now().millisecondsSinceEpoch}',
-              name: _studentController.text.trim(),
-              cpf: _cpfController.text.trim(),
-              guardianName: _guardianController.text.trim(),
-              guardianCpf: _guardianCpfController.text.trim(),
-              schoolName: _schoolController.text.trim(),
-            );
-            widget.studentRepository.addStudent(student);
-            widget.documentRepository.addDocument(EducationalDocument(
-              id: 'doc-${DateTime.now().millisecondsSinceEpoch}',
-              studentId: student.id,
-              type: 'Histórico',
-              title: 'Histórico escolar',
-              fileName: '${student.name.toLowerCase().replaceAll(RegExp(r'\\s+'), '-')}.pdf',
-              hash: widget.attestationService.createHash(student.cpf),
-              attestationId: widget.attestationService.createAttestationId(student.cpf),
-              status: 'registrado',
-              createdAt: DateTime.now(),
-            ));
-            setState(() => _status = 'Aluno e documento registrados com carimbo de validação.');
-          },
-          icon: const Icon(Icons.school_outlined),
-          label: const Text('Registrar escola e aluno'),
+        const PageHeader(
+          title: 'Documentação Escolar Unificada',
+          subtitle: 'Documentação escolar segura utilizando blockchain.',
+          icon: Icons.school,
         ),
-        const SizedBox(height: 16),
-        Text(_status, style: Theme.of(context).textTheme.bodyMedium),
+        Text(
+          'Cadastro do aluno',
+          style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        const SizedBox(height: 8),
+        Text(
+          'Cadastre a instituição, o aluno e o responsável legal para dar início ao fluxo de documentos.',
+          style: Theme.of(context).textTheme.bodyLarge,
+        ),
+        const SizedBox(height: 20),
+        Card(
+          child: Padding(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              children: [
+                TextField(
+                  controller: _schoolController,
+                  decoration: InputDecoration(
+                    labelText: 'Nome da escola',
+                    prefixIcon: const Icon(Icons.school),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(14),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(14),
+                      borderSide: const BorderSide(
+                        color: Colors.indigo,
+                        width: 2,
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 16),
+                TextField(
+                  controller: _studentController,
+                  decoration: InputDecoration(
+                    hintText: 'Nome do aluno',
+                    prefixIcon: const Icon(Icons.person),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(14),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(14),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(14),
+                      borderSide: const BorderSide(
+                        color: Colors.indigo,
+                        width: 2,
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 16),
+                TextField(
+                  controller: _cpfController,
+                  decoration: InputDecoration(
+                    hintText: 'CPF',
+                    prefixIcon: const Icon(Icons.badge),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(14),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(14),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(14),
+                      borderSide: const BorderSide(
+                        color: Colors.indigo,
+                        width: 2,
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 16),
+                TextField(
+                  controller: _guardianController,
+                  decoration: InputDecoration(
+                    hintText: 'Nome do responsável legal',
+                    prefixIcon: const Icon(Icons.family_restroom_outlined),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(14),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(14),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(14),
+                      borderSide: const BorderSide(
+                        color: Colors.indigo,
+                        width: 2,
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 12),
+                TextField(
+                  controller: _guardianCpfController,
+                  decoration: InputDecoration(
+                    hintText: 'CPF do responsável',
+                    prefixIcon: const Icon(Icons.badge_outlined),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(14),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(14),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(14),
+                      borderSide: const BorderSide(
+                        color: Colors.indigo,
+                        width: 2,
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 20),
+                FilledButton.icon(
+                  onPressed: () {
+                    if (!_validateFields()) return;
+                    final student = Student(
+                      id: 'student-${DateTime.now().millisecondsSinceEpoch}',
+                      name: _studentController.text.trim(),
+                      cpf: _cpfController.text.trim(),
+                      guardianName: _guardianController.text.trim(),
+                      guardianCpf: _guardianCpfController.text.trim(),
+                      schoolName: _schoolController.text.trim(),
+                    );
+                    widget.studentRepository.addStudent(student);
+                    widget.documentRepository.addDocument(
+                      EducationalDocument(
+                        id: 'doc-${DateTime.now().millisecondsSinceEpoch}',
+                        studentId: student.id,
+                        type: 'Histórico',
+                        title: 'Histórico escolar',
+                        fileName:
+                            '${student.name.toLowerCase().replaceAll(RegExp(r'\s+'), '-')}.pdf',
+                        hash: widget.attestationService.createHash(student.cpf),
+                        attestationId: widget.attestationService
+                            .createAttestationId(student.cpf),
+                        status: 'registrado',
+                        createdAt: DateTime.now(),
+                      ),
+                    );
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('Aluno cadastrado com sucesso!'),
+                        backgroundColor: Colors.green,
+                      ),
+                    );
+                    setState(() => _status = 'Aluno cadastrado com sucesso!');
+                  },
+                  icon: const Icon(Icons.person_add_alt_1),
+                  label: const Text('Cadrastar aluno'),
+                ),
+                const SizedBox(height: 16),
+                Text(
+                  _status,
+                  style: Theme.of(context).textTheme.bodyMedium,
+                ),
+              ],
+            ),
+          ),
+        ),
       ],
     );
   }
@@ -417,43 +787,89 @@ class _DocumentFormPageState extends State<DocumentFormPage> {
   Widget build(BuildContext context) {
     return ListView(
       children: [
-        const PageHeader( title: 'Documentação Escolar Unificada', subtitle: 'Documentação escolar segura utilizando blockchain.', icon: Icons.school,),
-        Text('Documentos', style: Theme.of(context).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold)),
+        const PageHeader(
+          title: 'Documentação Escolar Unificada',
+          subtitle: 'Documentação escolar segura utilizando blockchain.',
+          icon: Icons.school,
+        ),
+        Text(
+          'Documentos',
+          style: Theme.of(context).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold),
+        ),
         const SizedBox(height: 8),
-        Text('Selecione o tipo, carregue o arquivo e registre o certificado associado ao aluno.', style: Theme.of(context).textTheme.bodyLarge),
-        const SizedBox(height: 20),
-        DropdownButtonFormField<String>(
-          initialValue: _selectedType,
-          decoration: const InputDecoration(labelText: 'Tipo de documento'),
-          items: const [
-            DropdownMenuItem(value: 'Boletim', child: Text('Boletim')),
-            DropdownMenuItem(value: 'Histórico', child: Text('Histórico')),
-            DropdownMenuItem(value: 'Declaração', child: Text('Declaração')),
-            DropdownMenuItem(value: 'Certificado', child: Text('Certificado')),
-          ],
-          onChanged: (value) => setState(() => _selectedType = value ?? _selectedType),
+        Text(
+          'Selecione o tipo, carregue o arquivo e registre o certificado associado ao aluno.',
+          style: Theme.of(context).textTheme.bodyLarge,
         ),
-        const SizedBox(height: 12),
-        TextField(controller: _nameController, decoration: const InputDecoration(labelText: 'Nome do arquivo')),
-        const SizedBox(height: 20),
-        FilledButton.icon(
-          onPressed: () {
-            final generated = 'sha256:${_selectedType.toLowerCase()}-${_nameController.text.hashCode.toRadixString(16)}';
-            setState(() => _hash = generated);
-          },
-          icon: const Icon(Icons.generating_tokens_outlined),
-          label: const Text('Registrar certificado'),
-        ),
-        const SizedBox(height: 16),
         Card(
           child: Padding(
-            padding: const EdgeInsets.all(16),
+            padding: const EdgeInsets.all(20),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('Certificado registrado', style: Theme.of(context).textTheme.titleMedium),
-                const SizedBox(height: 8),
-                SelectableText(_hash),
+                const SizedBox(height: 20),
+                DropdownButtonFormField<String>(
+                  initialValue: _selectedType,
+                  decoration: InputDecoration(
+                    labelText: 'Tipo de documento',
+                    prefixIcon: const Icon(Icons.folder_copy),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(14),
+                    ),
+                    filled: true,
+                    fillColor: Colors.grey.shade50,
+                  ),
+                  items: const [
+                    DropdownMenuItem(value: 'Boletim', child: Text('Boletim')),
+                    DropdownMenuItem(value: 'Histórico', child: Text('Histórico')),
+                    DropdownMenuItem(value: 'Declaração', child: Text('Declaração')),
+                    DropdownMenuItem(value: 'Certificado', child: Text('Certificado')),
+                  ],
+                  onChanged: (value) => setState(() => _selectedType = value ?? _selectedType),
+                ),
+                const SizedBox(height: 12),
+                TextField(
+                  controller: _nameController,
+                  decoration: InputDecoration(
+                    labelText: 'Nome do arquivo',
+                    prefixIcon: const Icon(Icons.description),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(14),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(14),
+                      borderSide: const BorderSide(
+                        color: Colors.indigo,
+                        width: 2,
+                      ),
+                    ),
+                  ),
+                ),
+                FilledButton.icon(
+                  onPressed: () {
+                    final generated =
+                        'sha256:${_selectedType.toLowerCase()}-${_nameController.text.hashCode.toRadixString(16)}';
+                    setState(() => _hash = generated);
+                  },
+                  icon: const Icon(Icons.generating_tokens_outlined),
+                  label: const Text('Registrar certificado'),
+                ),
+                const SizedBox(height: 16),
+                Card(
+                  child: Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Certificado registrado',
+                          style: Theme.of(context).textTheme.titleMedium,
+                        ),
+                        const SizedBox(height: 8),
+                        SelectableText(_hash),
+                      ],
+                    ),
+                  ),
+                ),
               ],
             ),
           ),
@@ -489,21 +905,57 @@ class _RequestPageState extends State<RequestPage> {
         const PageHeader( title: 'Documentação Escolar Unificada', subtitle: 'Documentação escolar segura utilizando blockchain.', icon: Icons.school,),
         Text('Solicitações', style: Theme.of(context).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold)),
         const SizedBox(height: 8),
-        Text('Uma unidade escolar pode solicitar acesso ao documento e a liberação segue o fluxo interno de aprovação.', style: Theme.of(context).textTheme.bodyLarge),
-        const SizedBox(height: 20),
-        TextField(controller: _cpfController, decoration: const InputDecoration(labelText: 'CPF do aluno')),
-        const SizedBox(height: 12),
-        TextField(controller: _requestController, decoration: const InputDecoration(labelText: 'Motivo da solicitação')),
-        const SizedBox(height: 20),
-        FilledButton.icon(
-          onPressed: () {
-            setState(() => _status = 'Solicitação enviada para aprovação.');
-          },
-          icon: const Icon(Icons.send_outlined),
-          label: const Text('Enviar solicitação'),
+        Text(
+          'Uma unidade escolar pode solicitar acesso ao documento e a liberação segue o fluxo interno de aprovação.',
+          style: Theme.of(context).textTheme.bodyLarge,
         ),
-        const SizedBox(height: 16),
-        Text(_status, style: Theme.of(context).textTheme.bodyMedium),
+        const SizedBox(height: 20),
+        Card(
+          child: Padding(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              children: [
+                TextField(
+                  controller: _cpfController,
+                  keyboardType: TextInputType.number,
+                  textInputAction: TextInputAction.next,
+                  autofillHints: const [AutofillHints.telephoneNumber],
+                  decoration: const InputDecoration(
+                    hintText: 'CPF',
+                    prefixIcon: Icon(Icons.badge),
+                  ),
+                ),
+                TextField(
+                  controller: _requestController,
+                  decoration: InputDecoration(
+                    labelText: 'Motivo da solicitação',
+                    prefixIcon: const Icon(Icons.description),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(14),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(14),
+                      borderSide: const BorderSide(
+                        color: Colors.indigo,
+                        width: 2,
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 20),
+                FilledButton.icon(
+                  onPressed: () {
+                    setState(() => _status = 'Solicitação enviada para aprovação.');
+                  },
+                  icon: const Icon(Icons.send_outlined),
+                  label: const Text('Enviar solicitação'),
+                ),
+                const SizedBox(height: 16),
+                Text(_status, style: Theme.of(context).textTheme.bodyMedium),
+              ],
+            ),
+          ),
+        ),
       ],
     );
   }
@@ -530,26 +982,88 @@ class _VerificationPageState extends State<VerificationPage> {
   Widget build(BuildContext context) {
     return ListView(
       children: [
-        const PageHeader( title: 'Documentação Escolar Unificada', subtitle: 'Documentação escolar segura utilizando blockchain.', icon: Icons.school,),
-        Text('Verificação', style: Theme.of(context).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold)),
-        const SizedBox(height: 8),
-        Text('Use o CPF ou o certificado para validar o registro do aluno no sistema.', style: Theme.of(context).textTheme.bodyLarge),
-        const SizedBox(height: 20),
-        TextField(controller: _hashController, decoration: const InputDecoration(labelText: 'CPF ou certificado')),
-        const SizedBox(height: 20),
-        FilledButton.icon(
-          onPressed: () => setState(() => _isVerified = _hashController.text.isNotEmpty),
-          icon: const Icon(Icons.verified_outlined),
-          label: const Text('Validar registro'),
+        const PageHeader(
+          title: 'Documentação Escolar Unificada',
+          subtitle: 'Documentação escolar segura utilizando blockchain.',
+          icon: Icons.school,
         ),
-        const SizedBox(height: 16),
+        Text(
+          'Verificação',
+          style: Theme.of(context)
+              .textTheme
+              .headlineSmall
+              ?.copyWith(fontWeight: FontWeight.bold),
+        ),
+        const SizedBox(height: 8),
+        Text(
+          'Use o CPF ou o certificado para validar o registro do aluno no sistema.',
+          style: Theme.of(context).textTheme.bodyLarge,
+        ),
+        const SizedBox(height: 20),
         Card(
-          color: _isVerified ? Colors.green.shade50 : Colors.grey.shade100,
           child: Padding(
-            padding: const EdgeInsets.all(16),
-            child: Text(
-              _isVerified ? 'Registro localizado com sucesso.' : 'Ainda não há validação para este registro.',
-              style: Theme.of(context).textTheme.bodyMedium,
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              children: [
+                TextField(
+                  controller: _hashController,
+                  decoration: InputDecoration(
+                    labelText: 'CPF ou certificado',
+                    prefixIcon: const Icon(Icons.verified_user),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(14),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(14),
+                      borderSide: const BorderSide(
+                        color: Colors.indigo,
+                        width: 2,
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 16),
+                FilledButton.icon(
+                  onPressed: () => setState(
+                    () => _isVerified = _hashController.text.isNotEmpty,
+                  ),
+                  icon: const Icon(Icons.verified_outlined),
+                  label: const Text('Validar registro'),
+                ),
+                const SizedBox(height: 16),
+                if (_isVerified)
+                  Card(
+                    child: Padding(
+                      padding: const EdgeInsets.all(20),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Row(
+                            children: [
+                              Icon(
+                                Icons.verified,
+                                color: Colors.green,
+                              ),
+                              SizedBox(width: 8),
+                              Text('Documento Autêntico'),
+                            ],
+                          ),
+                          const Divider(),
+                          Text('Aluno: Ana Beatriz'),
+                          Text('Documento: Histórico'),
+                          Text('Escola: Municipal'),
+                          Text('Blockchain: Solana'),
+                          Text('Hash: 7AB38C91...'),
+                        ],
+                      ),
+                    ),
+                  )
+                else
+                  Text(
+                    'Informe um CPF ou certificado para validar o registro.',
+                    style: Theme.of(context).textTheme.bodyMedium,
+                  ),
+              ],
             ),
           ),
         ),
@@ -557,6 +1071,7 @@ class _VerificationPageState extends State<VerificationPage> {
     );
   }
 }
+
 class UndocumentedChildPage extends StatefulWidget {
   const UndocumentedChildPage({super.key});
 
@@ -608,139 +1123,175 @@ bool _identityCreated = false;
 
       const SizedBox(height: 24),
 
-      TextField(
-        controller: _nameController,
-        decoration: const InputDecoration(
-          labelText: 'Nome da criança',
-        ),
-      ),
-
-      const SizedBox(height: 12),
-
-      TextField(
-        controller: _birthController,
-        decoration: const InputDecoration(
-          labelText: 'Data aproximada de nascimento',
-        ),
-      ),
-
-      const SizedBox(height: 12),
-
-      TextField(
-        controller: _cityController,
-        decoration: const InputDecoration(
-          labelText: 'Município',
-        ),
-      ),
-
-      const SizedBox(height: 12),
-
-      TextField(
-        controller: _guardianController,
-        decoration: const InputDecoration(
-          labelText: 'Responsável',
-        ),
-      ),
-
-      const SizedBox(height: 24),
-
-      FilledButton.icon(
-        icon: const Icon(Icons.person_add_alt_1),
-        label: const Text("Registrar criança"),
-        onPressed: () {
-          setState(() {
-            _registered = true;
-          });
-        },
-      ),
-
-      const SizedBox(height: 20),
-
-      if (_registered) ...[
-        Card(
+Card(
           child: Padding(
-            padding: EdgeInsets.all(16),
+            padding: const EdgeInsets.all(20),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: const [
-
-                Text(
-                  "Solicitação criada",
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
+              children: [
+                TextField(
+                  controller: _nameController,
+                  decoration: InputDecoration(
+                    labelText: 'Nome da criança',
+                    prefixIcon: const Icon(Icons.person),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(14),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(14),
+                      borderSide: const BorderSide(
+                        color: Colors.indigo,
+                        width: 2,
+                      ),
+                    ),
                   ),
                 ),
 
-                SizedBox(height: 10),
+                const SizedBox(height: 12),
 
-                Text("Status: Em validação"),
+                TextField(
+                  controller: _birthController,
+                  decoration: InputDecoration(
+                    labelText: 'Data aproximada de nascimento',
+                    prefixIcon: const Icon(Icons.cake),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(14),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(14),
+                      borderSide: const BorderSide(
+                        color: Colors.indigo,
+                        width: 2,
+                      ),
+                    ),
+                  ),
+                ),
 
-                SizedBox(height: 10),
+                const SizedBox(height: 12),
 
-                Text("✔ Escola"),
+                TextField(
+                  controller: _cityController,
+                  decoration: InputDecoration(
+                    labelText: 'Município',
+                    prefixIcon: const Icon(Icons.location_city),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(14),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(14),
+                      borderSide: const BorderSide(
+                        color: Colors.indigo,
+                        width: 2,
+                      ),
+                    ),
+                  ),
+                ),
 
-                Text("✔ UBS"),
+                const SizedBox(height: 12),
 
-                Text("✔ Conselho Tutelar"),
+                TextField(
+                  controller: _guardianController,
+                  decoration: InputDecoration(
+                    labelText: 'Responsável',
+                    prefixIcon: const Icon(Icons.family_restroom),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(14),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(14),
+                      borderSide: const BorderSide(
+                        color: Colors.indigo,
+                        width: 2,
+                      ),
+                    ),
+                  ),
+                ),
 
-                Text("⏳ Cartório"),
+                const SizedBox(height: 24),
+
+                FilledButton.icon(
+                  icon: const Icon(Icons.person_add_alt_1),
+                  label: const Text("Registrar criança"),
+                  onPressed: () {
+                    setState(() {
+                      _registered = true;
+                    });
+                  },
+                ),
+
+                const SizedBox(height: 20),
+
+                if (_registered) ...[
+                  Card(
+                    child: Padding(
+                      padding: const EdgeInsets.all(16),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: const [
+                          Text(
+                            "Solicitação criada",
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          SizedBox(height: 10),
+                          Text("Status: Em validação"),
+                          SizedBox(height: 10),
+                          Text("✔ Escola"),
+                          Text("✔ UBS"),
+                          Text("✔ Conselho Tutelar"),
+                          Text("⏳ Cartório"),
+                        ],
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  FilledButton.icon(
+                    icon: const Icon(Icons.account_balance_wallet),
+                    label: const Text("Emitir Identidade Digital Provisória"),
+                    onPressed: () {
+                      setState(() {
+                        _identityCreated = true;
+                      });
+                    },
+                  ),
+                  if (_identityCreated)
+                    Card(
+                      color: Colors.green.shade50,
+                      child: Padding(
+                        padding: const EdgeInsets.all(16),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: const [
+                            Text(
+                              "Identidade Digital emitida",
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            SizedBox(height: 12),
+                            Text("Status: Ativa"),
+                            SizedBox(height: 8),
+                            Text("Blockchain: Solana"),
+                            SizedBox(height: 8),
+                            Text("Wallet ID: 7Y4M...X2KP"),
+                            SizedBox(height: 8),
+                            Text("Attestation registrada"),
+                            SizedBox(height: 8),
+                            Text("Hash: 0xA7F83B91E2C45F"),
+                          ],
+                        ),
+                      ),
+                    ),
+                ],
               ],
             ),
           ),
         ),
-        const SizedBox(height: 20),
-        FilledButton.icon(
-          icon: const Icon(Icons.account_balance_wallet),
-          label: const Text("Emitir Identidade Digital Provisória"),
-          onPressed: () {
-            setState(() {
-              _identityCreated = true;
-            });
-          },
-        ),
-        if (_identityCreated)
-  Card(
-    color: Colors.green.shade50,
-    child: Padding(
-      padding: const EdgeInsets.all(16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: const [
-          Text(
-            "Identidade Digital emitida",
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-
-          SizedBox(height: 12),
-
-          Text("Status: Ativa"),
-
-          SizedBox(height: 8),
-
-          Text("Blockchain: Solana"),
-
-          SizedBox(height: 8),
-
-          Text("Wallet ID: 7Y4M...X2KP"),
-
-          SizedBox(height: 8),
-
-          Text("Attestation registrada"),
-
-          SizedBox(height: 8),
-
-          Text("Hash: 0xA7F83B91E2C45F"),
-        ],
-      ),
-    ),
-  ),
-      ]
-    ],
-  );
+      ],
+    );
+  }
 }
-}
+
 
