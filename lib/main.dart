@@ -80,7 +80,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
   final List<Map<String, dynamic>> pages = [
     {
       "icon": Icons.school,
-      "title": "Bem-vindo(a) ao EduPass!",
+      "title": "Bem-vindo ao EduPass!",
       "description":
           "Uma plataforma segura para registrar, compartilhar e validar documentos escolares utilizando blockchain.",
     },
@@ -301,6 +301,7 @@ class _DemoNavigationPageState extends State<DemoNavigationPage> {
       const DocumentFormPage(),
       const RequestPage(),
       const VerificationPage(),
+      const FAQPage(),
     ];
 
     return Scaffold(
@@ -325,6 +326,11 @@ class _DemoNavigationPageState extends State<DemoNavigationPage> {
           NavigationDestination(icon: Icon(Icons.upload_file_outlined), selectedIcon: Icon(Icons.upload_file), label: 'Documentos'),
           NavigationDestination(icon: Icon(Icons.swap_horiz_outlined), selectedIcon: Icon(Icons.swap_horiz), label: 'Solicitações'),
           NavigationDestination(icon: Icon(Icons.verified_outlined), selectedIcon: Icon(Icons.verified), label: 'Verificação'),
+        NavigationDestination(
+  icon: Icon(Icons.help_outline),
+  selectedIcon: Icon(Icons.help),
+  label: 'Q&A',
+),
         ],
       ),
     );
@@ -533,6 +539,12 @@ const SizedBox(height: 20),
                   subtitle: 'Verificar a autenticidade de um registro a partir do CPF ou do certificado.',
                   icon: Icons.verified_outlined,
                   onTap: () => onNavigate(5),
+                ),
+                _SectionCard(
+                  title: 'Perguntas Frequentes',
+                  subtitle: 'Tire dúvidas sobre o funcionamento da plataforma.',
+                  icon: Icons.help_outline,
+                  onTap: () => onNavigate(6),
                 ),
               ],
             ),
@@ -1474,4 +1486,256 @@ Card(
   }
 }
 
+class FAQPage extends StatelessWidget {
+  const FAQPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView(
+      children: [
+
+        const PageHeader(
+          title: 'Perguntas Frequentes',
+          subtitle: 'Entenda como funciona a plataforma.',
+          icon: Icons.help_outline,
+        ),
+
+        Padding(
+  padding: const EdgeInsets.only(bottom: 20),
+  child: TextField(
+    decoration: InputDecoration(
+      hintText: 'Pesquisar uma dúvida...',
+      prefixIcon: const Icon(Icons.search),
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(14),
+      ),
+    ),
+  ),
+),
+
+        Card(
+          child: ExpansionTile(
+            leading: const Icon(Icons.school),
+            title: const Text('O que é a plataforma?'),
+            children: const [
+              Padding(
+                padding: EdgeInsets.all(16),
+                child: Text(
+                  'É um sistema para registrar, compartilhar e validar documentos escolares utilizando blockchain.',
+                ),
+              ),
+            ],
+          ),
+        ),
+
+Padding(
+  padding: const EdgeInsets.only(top: 20, bottom: 10),
+  child: Text(
+    "Cadastros",
+    style: Theme.of(context).textTheme.titleLarge?.copyWith(
+      fontWeight: FontWeight.bold,
+    ),
+  ),
+),
+        Card(
+          child: ExpansionTile(
+            leading: const Icon(Icons.person_search),
+            title: const Text('E se a criança não possuir documentos?'),
+            children: const [
+              Padding(
+                padding: EdgeInsets.all(16),
+                child: Text(
+                  'A escola pode criar uma identidade provisória e iniciar o processo de regularização junto aos órgãos responsáveis.',
+                ),
+              ),
+            ],
+          ),
+        ),
+        Card(
+  child: ExpansionTile(
+    leading: const CircleAvatar(
+      child: Icon(Icons.person_add),
+    ),
+    title: const Text("Quem pode cadastrar um aluno?"),
+    subtitle: const Text("Saiba quem possui acesso."),
+    children: const [
+      Padding(
+        padding: EdgeInsets.all(16),
+        child: Text(
+          "O cadastro é realizado por escolas e instituições autorizadas, garantindo que as informações sejam inseridas por responsáveis habilitados.",
+        ),
+      ),
+    ],
+  ),
+),
+Card(
+  child: ExpansionTile(
+    leading: const CircleAvatar(
+      child: Icon(Icons.description),
+    ),
+    title: const Text("Quais documentos podem ser registrados?"),
+    subtitle: const Text("Tipos de documentos aceitos."),
+    children: const [
+      Padding(
+        padding: EdgeInsets.all(16),
+        child: Text(
+          "A plataforma permite registrar boletins, históricos escolares, declarações, certificados e outros documentos emitidos pelas instituições de ensino.",
+        ),
+      ),
+    ],
+  ),
+),
+
+        Padding(
+  padding: const EdgeInsets.only(top: 20, bottom: 10),
+  child: Text(
+    "Blockchain",
+    style: Theme.of(context).textTheme.titleLarge?.copyWith(
+      fontWeight: FontWeight.bold,
+    ),
+  ),
+),
+        Card(
+          child: ExpansionTile(
+            leading: const Icon(Icons.verified),
+            title: const Text('Como funciona a verificação?'),
+            children: const [
+              Padding(
+                padding: EdgeInsets.all(16),
+                child: Text(
+                  'Cada documento recebe um registro que permite confirmar sua autenticidade e integridade.',
+                ),
+              ),
+            ],
+          ),
+        ),
+        Card(
+  child: ExpansionTile(
+    leading: const CircleAvatar(
+      child: Icon(Icons.lock),
+    ),
+    title: const Text("Os documentos ficam na blockchain?"),
+    subtitle: const Text("Como os dados são armazenados."),
+    children: const [
+      Padding(
+        padding: EdgeInsets.all(16),
+        child: Text(
+          "Não. Apenas informações de verificação, como o hash e os registros de autenticação, são armazenadas. Os documentos permanecem nos sistemas das instituições.",
+        ),
+      ),
+    ],
+  ),
+),
+        Card(
+  child: ExpansionTile(
+    leading: const CircleAvatar(
+      child: Icon(Icons.fingerprint),
+    ),
+    title: const Text("O que é um hash?"),
+    subtitle: const Text("Entenda esse conceito."),
+    children: const [
+      Padding(
+        padding: EdgeInsets.all(16),
+        child: Text(
+          "O hash é uma assinatura digital única gerada para cada documento. Se qualquer informação for alterada, um novo hash será criado, indicando que o documento foi modificado.",
+        ),
+      ),
+    ],
+  ),
+),
+
+        Padding(
+  padding: const EdgeInsets.only(top: 20, bottom: 10),
+  child: Text(
+    "Segurança",
+    style: Theme.of(context).textTheme.titleLarge?.copyWith(
+      fontWeight: FontWeight.bold,
+    ),
+  ),
+),
+        Card(
+  child: ExpansionTile(
+    leading: const CircleAvatar(
+      child: Icon(Icons.security),
+    ),
+    title: const Text("Quem pode acessar os documentos?"),
+    subtitle: const Text("Controle de acesso."),
+    children: const [
+      Padding(
+        padding: EdgeInsets.all(16),
+        child: Text(
+          "Somente instituições autorizadas e usuários com permissão podem acessar as informações dos estudantes, respeitando as normas de privacidade.",
+        ),
+      ),
+    ],
+  ),
+),
+Card(
+  child: ExpansionTile(
+    leading: const CircleAvatar(
+      child: Icon(Icons.shield),
+    ),
+    title: const Text("Como os dados são protegidos?"),
+    subtitle: const Text("Segurança das informações."),
+    children: const [
+      Padding(
+        padding: EdgeInsets.all(16),
+        child: Text(
+          "A plataforma utiliza registros criptográficos, autenticação e validação por blockchain para garantir a integridade dos documentos e reduzir riscos de fraude.",
+        ),
+      ),
+    ],
+  ),
+),
+Card(
+  child: ExpansionTile(
+    leading: const CircleAvatar(
+      child: Icon(Icons.edit_off),
+    ),
+    title: const Text("Um documento pode ser alterado depois de registrado?"),
+    subtitle: const Text("Entenda a integridade dos registros."),
+    children: const [
+      Padding(
+        padding: EdgeInsets.all(16),
+        child: Text(
+          "Caso um documento seja atualizado, um novo registro de verificação é criado. Isso mantém o histórico das alterações e garante transparência no processo.",
+        ),
+      ),
+    ],
+  ),
+),
+      const SizedBox(height: 24),
+
+Card(
+  color: Color(0xFFE8EAF6),
+  child: Padding(
+    padding: EdgeInsets.all(20),
+    child: Column(
+      children: [
+        Icon(
+          Icons.support_agent,
+          size: 42,
+          color: Colors.indigo,
+        ),
+        SizedBox(height: 12),
+        Text(
+          "Ainda tem dúvidas?",
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 18,
+          ),
+        ),
+        SizedBox(height: 8),
+        Text(
+          "Nossa equipe está disponível para orientar escolas, responsáveis e instituições durante todo o processo.",
+          textAlign: TextAlign.center,
+        ),
+      ],
+    ),
+  ),
+),
+      ],
+    );
+  }
+}
 
