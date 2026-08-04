@@ -794,20 +794,9 @@ void _showError(String message) {
     return ListView(
       children: [
         const PageHeader(
-          title: 'Documentação Escolar Unificada',
-          subtitle: 'Documentação escolar segura utilizando blockchain.',
-          icon: Icons.school,
-        ),
-        Text(
-          'Cadastro do aluno',
-          style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        const SizedBox(height: 8),
-        Text(
-          'Cadastre a instituição, o aluno e o responsável legal para dar início ao fluxo de documentos.',
-          style: Theme.of(context).textTheme.bodyLarge,
+          title: 'Cadastro do aluno',
+          subtitle: 'Cadastre a instituição, o aluno e o responsável legal para dar início ao fluxo de documentos.',
+          icon: Icons.school_outlined,
         ),
         const SizedBox(height: 20),
         Card(
@@ -953,7 +942,7 @@ void _showError(String message) {
                     setState(() => _status = 'Aluno cadastrado com sucesso!');
                   },
                   icon: const Icon(Icons.person_add_alt_1),
-                  label: const Text('Cadrastar aluno'),
+                  label: const Text('Cadastrar aluno'),
                 ),
                 const SizedBox(height: 16),
                 Text(
@@ -992,18 +981,9 @@ class _DocumentFormPageState extends State<DocumentFormPage> {
     return ListView(
       children: [
         const PageHeader(
-          title: 'Documentação Escolar Unificada',
-          subtitle: 'Documentação escolar segura utilizando blockchain.',
-          icon: Icons.school,
-        ),
-        Text(
-          'Documentos',
-          style: Theme.of(context).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold),
-        ),
-        const SizedBox(height: 8),
-        Text(
-          'Selecione o tipo, carregue o arquivo e registre o certificado associado ao aluno.',
-          style: Theme.of(context).textTheme.bodyLarge,
+          title: 'Documentos',
+          subtitle: 'Selecione o tipo, carregue o arquivo e registre o certificado associado ao aluno.',
+          icon: Icons.upload_file_outlined
         ),
         Card(
           child: Padding(
@@ -1106,13 +1086,7 @@ class _RequestPageState extends State<RequestPage> {
   Widget build(BuildContext context) {
     return ListView(
       children: [
-        const PageHeader( title: 'Documentação Escolar Unificada', subtitle: 'Documentação escolar segura utilizando blockchain.', icon: Icons.school,),
-        Text('Solicitações', style: Theme.of(context).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold)),
-        const SizedBox(height: 8),
-        Text(
-          'Uma unidade escolar pode solicitar acesso ao documento e a liberação segue o fluxo interno de aprovação.',
-          style: Theme.of(context).textTheme.bodyLarge,
-        ),
+        const PageHeader( title: 'Solicitações', subtitle: 'Uma unidade escolar pode solicitar acesso ao documento e a liberação segue o fluxo interno de aprovação.', icon: Icons.swap_horiz_outlined,),
         const SizedBox(height: 20),
         Card(
           child: Padding(
@@ -1187,21 +1161,9 @@ class _VerificationPageState extends State<VerificationPage> {
     return ListView(
       children: [
         const PageHeader(
-          title: 'Documentação Escolar Unificada',
-          subtitle: 'Documentação escolar segura utilizando blockchain.',
-          icon: Icons.school,
-        ),
-        Text(
-          'Verificação',
-          style: Theme.of(context)
-              .textTheme
-              .headlineSmall
-              ?.copyWith(fontWeight: FontWeight.bold),
-        ),
-        const SizedBox(height: 8),
-        Text(
-          'Use o CPF ou o certificado para validar o registro do aluno no sistema.',
-          style: Theme.of(context).textTheme.bodyLarge,
+          title: 'Verificação',
+          subtitle: 'Use o CPF ou o certificado para validar o registro do aluno no sistema.',
+          icon: Icons.verified_outlined,
         ),
         const SizedBox(height: 20),
         Card(
@@ -1309,15 +1271,7 @@ bool _identityCreated = false;
   Widget build(BuildContext context) {
   return ListView(
     children: [
-      const PageHeader( title: 'Documentação Escolar Unificada', subtitle: 'Documentação escolar segura utilizando blockchain.', icon: Icons.school,),
-      Text(
-        'Cadastro do aluno sem documentação',
-        style: Theme.of(context)
-            .textTheme
-            .headlineSmall
-            ?.copyWith(fontWeight: FontWeight.bold),
-      ),
-
+      const PageHeader( title: 'Cadastro do aluno sem documentação', subtitle: 'Permite iniciar o registro escolar mesmo quando a criança ainda não possui toda a documentação oficial.', icon: Icons.person_search,),
       const SizedBox(height: 8),
 
       Text(
@@ -1754,115 +1708,180 @@ class AccessibilityPage extends StatelessWidget {
   const AccessibilityPage({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return ListView(
-      children: [
+Widget build(BuildContext context) {
+  return ListView(
+    children: [
 
-        const PageHeader(
-          title: "Acessibilidade",
-          subtitle: "Personalize a plataforma para facilitar sua utilização.",
-          icon: Icons.accessibility_new,
-        ),
+      const PageHeader(
+        title: "Acessibilidade",
+        subtitle: "Personalize a plataforma para tornar a experiência mais inclusiva.",
+        icon: Icons.accessibility_new,
+      ),
 
-        Card(
-          child: ListTile(
-            leading: const CircleAvatar(
-              child: Icon(Icons.text_fields),
-            ),
-            title: const Text("Aumentar fonte"),
-            subtitle: const Text(
-              "Melhora a leitura para pessoas com baixa visão.",
-            ),
-            trailing: FilledButton(
-              onPressed: () {},
-              child: const Text("A+"),
-            ),
+      Card(
+        child: ListTile(
+          leading: const CircleAvatar(
+            child: Icon(Icons.text_fields),
+          ),
+          title: const Text("Tamanho da fonte"),
+          subtitle: const Text(
+            "Escolha um tamanho de texto mais confortável.",
           ),
         ),
+      ),
 
-        Card(
-          child: ListTile(
-            leading: const CircleAvatar(
-              child: Icon(Icons.contrast),
-            ),
-            title: const Text("Alto contraste"),
-            subtitle: const Text(
-              "Aumenta o contraste entre textos e fundo.",
-            ),
-            trailing: Switch(
-              value: false,
-              onChanged: (value) {},
-            ),
+      const SizedBox(height: 10),
+
+      Card(
+        child: Padding(
+          padding: const EdgeInsets.all(20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: const [
+
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text("A-"),
+                  Text("A+"),
+                ],
+              ),
+
+              Slider(
+                value: 0.7,
+                onChanged: null,
+              ),
+
+            ],
           ),
         ),
+      ),
 
-        Card(
-          child: ListTile(
-            leading: const CircleAvatar(
-              child: Icon(Icons.volume_up),
-            ),
-            title: const Text("Leitura por voz"),
-            subtitle: const Text(
-              "Lê o conteúdo da página para o usuário.",
-            ),
-            trailing: FilledButton(
-              onPressed: () {},
-              child: const Text("Ouvir"),
-            ),
+      const SizedBox(height: 15),
+
+      Card(
+        child: SwitchListTile(
+          value: true,
+          onChanged: null,
+          secondary: Icon(Icons.contrast),
+          title: Text("Modo de alto contraste"),
+          subtitle: Text(
+            "Melhora a legibilidade para pessoas com baixa visão.",
           ),
         ),
+      ),
 
-        const SizedBox(height: 20),
+      const SizedBox(height: 15),
 
-        Card(
-          color: Color(0xFFE8EAF6),
-          child: Padding(
-            padding: EdgeInsets.all(18),
-            child: Column(
-              children: [
-
-                Icon(
-                  Icons.check_circle,
-                  color: Colors.indigo,
-                  size: 42,
-                ),
-
-                SizedBox(height: 12),
-
-                Text(
-                  "Recursos disponíveis",
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 18,
-                  ),
-                ),
-
-                SizedBox(height: 16),
-
-                ListTile(
-                  leading: Icon(Icons.check),
-                  title: Text("Compatível com leitores de tela"),
-                ),
-
-                ListTile(
-                  leading: Icon(Icons.check),
-                  title: Text("Modo de alto contraste"),
-                ),
-
-                ListTile(
-                  leading: Icon(Icons.check),
-                  title: Text("Fontes ampliadas"),
-                ),
-
-                ListTile(
-                  leading: Icon(Icons.check),
-                  title: Text("Navegação simplificada"),
-                ),
-              ],
-            ),
+      Card(
+        child: SwitchListTile(
+          value: true,
+          onChanged: null,
+          secondary: Icon(Icons.volume_up),
+          title: Text("Leitura por voz"),
+          subtitle: Text(
+            "Compatível com leitores de tela.",
           ),
         ),
-      ],
-    );
-  }
+      ),
+
+      const SizedBox(height: 20),
+
+      Card(
+        color: Color(0xFFE8F5E9),
+        child: Padding(
+          padding: EdgeInsets.all(20),
+          child: Column(
+            children: [
+
+              Icon(
+                Icons.check_circle,
+                size: 55,
+                color: Colors.green,
+              ),
+
+              SizedBox(height: 16),
+
+              Text(
+                "Recursos disponíveis",
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20,
+                ),
+              ),
+
+              SizedBox(height: 20),
+
+              ListTile(
+                leading: Icon(Icons.check_circle_outline),
+                title: Text("Compatível com leitores de tela"),
+              ),
+
+              ListTile(
+                leading: Icon(Icons.check_circle_outline),
+                title: Text("Campos identificados para tecnologias assistivas"),
+              ),
+
+              ListTile(
+                leading: Icon(Icons.check_circle_outline),
+                title: Text("Contraste otimizado"),
+              ),
+
+              ListTile(
+                leading: Icon(Icons.check_circle_outline),
+                title: Text("Ícones intuitivos"),
+              ),
+
+              ListTile(
+                leading: Icon(Icons.check_circle_outline),
+                title: Text("Fluxo simplificado de navegação"),
+              ),
+
+              ListTile(
+                leading: Icon(Icons.check_circle_outline),
+                title: Text("Mensagens de erro claras"),
+              ),
+            ],
+          ),
+        ),
+      ),
+
+      const SizedBox(height: 20),
+
+      Card(
+        child: Padding(
+          padding: EdgeInsets.all(20),
+          child: Column(
+            children: [
+
+              Icon(
+                Icons.info_outline,
+                color: Colors.indigo,
+                size: 40,
+              ),
+
+              SizedBox(height: 12),
+
+              Text(
+                "Nosso compromisso",
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18,
+                ),
+              ),
+
+              SizedBox(height: 10),
+
+              Text(
+                "A plataforma foi projetada para tornar o acesso à documentação escolar mais inclusivo, buscando atender diferentes necessidades de aprendizagem e acessibilidade digital.",
+                textAlign: TextAlign.center,
+              ),
+
+            ],
+          ),
+        ),
+      ),
+    ],
+  );
+}
 }
