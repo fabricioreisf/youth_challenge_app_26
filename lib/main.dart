@@ -302,6 +302,7 @@ class _DemoNavigationPageState extends State<DemoNavigationPage> {
       const RequestPage(),
       const VerificationPage(),
       const FAQPage(),
+      const AccessibilityPage(),
     ];
 
     return Scaffold(
@@ -330,6 +331,11 @@ class _DemoNavigationPageState extends State<DemoNavigationPage> {
   icon: Icon(Icons.help_outline),
   selectedIcon: Icon(Icons.help),
   label: 'Q&A',
+),
+NavigationDestination(
+  icon: Icon(Icons.accessibility_new_outlined),
+  selectedIcon: Icon(Icons.accessibility_new),
+  label: 'Acessibilidade',
 ),
         ],
       ),
@@ -545,6 +551,12 @@ const SizedBox(height: 20),
                   subtitle: 'Tire dúvidas sobre o funcionamento da plataforma.',
                   icon: Icons.help_outline,
                   onTap: () => onNavigate(6),
+                ),
+                _SectionCard(
+                  title: 'Acessibilidade',
+                  subtitle: 'Personalize a plataforma para diferentes necessidades.',
+                  icon: Icons.accessibility_new,
+                  onTap: () => onNavigate(7),
                 ),
               ],
             ),
@@ -1738,4 +1750,119 @@ Card(
     );
   }
 }
+class AccessibilityPage extends StatelessWidget {
+  const AccessibilityPage({super.key});
 
+  @override
+  Widget build(BuildContext context) {
+    return ListView(
+      children: [
+
+        const PageHeader(
+          title: "Acessibilidade",
+          subtitle: "Personalize a plataforma para facilitar sua utilização.",
+          icon: Icons.accessibility_new,
+        ),
+
+        Card(
+          child: ListTile(
+            leading: const CircleAvatar(
+              child: Icon(Icons.text_fields),
+            ),
+            title: const Text("Aumentar fonte"),
+            subtitle: const Text(
+              "Melhora a leitura para pessoas com baixa visão.",
+            ),
+            trailing: FilledButton(
+              onPressed: () {},
+              child: const Text("A+"),
+            ),
+          ),
+        ),
+
+        Card(
+          child: ListTile(
+            leading: const CircleAvatar(
+              child: Icon(Icons.contrast),
+            ),
+            title: const Text("Alto contraste"),
+            subtitle: const Text(
+              "Aumenta o contraste entre textos e fundo.",
+            ),
+            trailing: Switch(
+              value: false,
+              onChanged: (value) {},
+            ),
+          ),
+        ),
+
+        Card(
+          child: ListTile(
+            leading: const CircleAvatar(
+              child: Icon(Icons.volume_up),
+            ),
+            title: const Text("Leitura por voz"),
+            subtitle: const Text(
+              "Lê o conteúdo da página para o usuário.",
+            ),
+            trailing: FilledButton(
+              onPressed: () {},
+              child: const Text("Ouvir"),
+            ),
+          ),
+        ),
+
+        const SizedBox(height: 20),
+
+        Card(
+          color: Color(0xFFE8EAF6),
+          child: Padding(
+            padding: EdgeInsets.all(18),
+            child: Column(
+              children: [
+
+                Icon(
+                  Icons.check_circle,
+                  color: Colors.indigo,
+                  size: 42,
+                ),
+
+                SizedBox(height: 12),
+
+                Text(
+                  "Recursos disponíveis",
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18,
+                  ),
+                ),
+
+                SizedBox(height: 16),
+
+                ListTile(
+                  leading: Icon(Icons.check),
+                  title: Text("Compatível com leitores de tela"),
+                ),
+
+                ListTile(
+                  leading: Icon(Icons.check),
+                  title: Text("Modo de alto contraste"),
+                ),
+
+                ListTile(
+                  leading: Icon(Icons.check),
+                  title: Text("Fontes ampliadas"),
+                ),
+
+                ListTile(
+                  leading: Icon(Icons.check),
+                  title: Text("Navegação simplificada"),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
