@@ -61,7 +61,187 @@ class YouthChallengeApp extends StatelessWidget {
           ),
         ),
       ),
-      home: const DemoNavigationPage(),
+      home: const OnboardingPage(),    );
+  }
+}
+
+class OnboardingPage extends StatefulWidget {
+  const OnboardingPage({super.key});
+
+  @override
+  State<OnboardingPage> createState() => _OnboardingPageState();
+}
+
+class _OnboardingPageState extends State<OnboardingPage> {
+  final PageController _controller = PageController();
+
+  int _currentPage = 0;
+
+  final List<Map<String, dynamic>> pages = [
+    {
+      "icon": Icons.school,
+      "title": "Bem-vindo(a) ao EduPass!",
+      "description":
+          "Uma plataforma segura para registrar, compartilhar e validar documentos escolares utilizando blockchain.",
+    },
+    {
+      "icon": Icons.person_search,
+      "title": "👧📄 Nenhuma criança sem identidade",
+      "description":
+          "Cadastre estudantes sem documentação e acompanhe todo o processo de regularização com transparência.",
+    },
+    {
+      "icon": Icons.verified,
+      "title": "🛡️✔️ Confiança em segundos",
+      "description":
+          "Valide históricos, certificados e registros escolares instantaneamente, reduzindo fraudes e burocracia.",
+    },
+
+    
+  ];
+
+  
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: SafeArea(
+        child: Column(
+          children: [
+
+            Expanded(
+              child: PageView.builder(
+                controller: _controller,
+                itemCount: pages.length,
+                onPageChanged: (index) {
+                  setState(() {
+                    _currentPage = index;
+                  });
+                },
+                itemBuilder: (context, index) {
+                  final page = pages[index];
+
+                  return AnimatedContainer(
+                    duration: const Duration(milliseconds: 300),
+                    curve: Curves.easeInOut,
+                    child: Column(
+                      children: [
+                        Align(
+                          alignment: Alignment.centerRight,
+                          child: TextButton(
+                            onPressed: () {
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) => const DemoNavigationPage(),
+                                ),
+                              );
+                            },
+                            child: const Text("Pular"),
+                          ),
+                        ),
+                        const SizedBox(height: 10),
+                        Expanded(
+                          child: Center(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Container(
+                                  width: 130,
+                                  height: 130,
+                                  decoration: BoxDecoration(
+                                    color: Colors.indigo.shade50,
+                                    shape: BoxShape.circle,
+                                  ),
+                                  child: Icon(
+                                    page["icon"],
+                                    size: 65,
+                                    color: Colors.indigo,
+                                  ),
+                                ),
+                                const SizedBox(height: 30),
+                                Text(
+                                  page["title"],
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .headlineMedium
+                                      ?.copyWith(
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.indigo,
+                                      ),
+                                  textAlign: TextAlign.center,
+                                ),
+                                const SizedBox(height: 20),
+                                Text(
+                                  page["description"],
+                                  textAlign: TextAlign.center,
+                                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                                        color: Colors.grey.shade700,
+                                        height: 1.6,
+                                  ),                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              ),
+            ),
+
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: List.generate(
+                pages.length,
+                (index) => Container(
+                  margin: const EdgeInsets.all(4),
+                  width: _currentPage == index ? 24 : 8,
+                  height: 8,
+                  decoration: BoxDecoration(
+                    color: _currentPage == index
+                        ? Colors.indigo
+                        : Colors.grey.shade400,
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                ),
+              ),
+            ),
+
+            Padding(
+              padding: const EdgeInsets.all(24),
+              child: FilledButton(
+                onPressed: () {
+
+                  if (_currentPage == pages.length - 1) {
+
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => const DemoNavigationPage(),
+                      ),
+                    );
+
+                  } else {
+
+                    _controller.nextPage(
+                      duration: const Duration(milliseconds: 300),
+                      curve: Curves.easeInOut,
+                    );
+
+                  }
+
+                },
+                child: Text(
+                  _currentPage == pages.length - 1
+                      ? "Começar"
+                      : "Próximo",
+                ),
+              ),
+            )
+          ],
+        ),
+      ),
     );
   }
 }
